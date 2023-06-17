@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('preferred_payment')->nullable();
-            $table->string('phone_number')->nullable();
+            $table->string('phone_number')->unique();
             $table->string('card_number')->nullable();
             $table->string('cvv')->nullable();
             $table->foreign('user_id')

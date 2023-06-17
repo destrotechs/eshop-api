@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
 class authController extends Controller
 {
     use HttpResponses;
@@ -15,7 +15,7 @@ class authController extends Controller
         $request->validate([
             'name'=>'required',
             'password'=>'required|min:6|confirmed',
-            'email'=>'required',
+            'email'=>'required|unique:users',
         ]);
 
         $user = new User();
@@ -38,16 +38,17 @@ class authController extends Controller
             'email'=>'required|string',
             'password'=>'required|string'
         ]);
-        $user = User::where('email',$request->email)->first();
-        if(count($user)>0){
-            if(Hash::make($request->get('password'))==$user->passwords){
-                $token = $user->createToken('token-name')->plainTextToken;
-                return $this->success($token);
-            }else{
-                return $this->error(null,'Wrong Credentials',401);
-            }
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            // Authentication passed, redirect the user to a desired location
+            $user = User::where('email',$request->email)->first();
+            $user->tokens()->delete();
+            $token = $user->createToken('token-name')->plainTextToken;
+            return $this->success($token);
         }else{
-            return $this->error(null,'User not found',401);
+            return $this->error(null,'Wrong Credentials',401);
         }
+
     }
 }
