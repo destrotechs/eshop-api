@@ -32,7 +32,9 @@ Route::get('/products/{product}',[productController::class,'product']);
 Route::get('/orders',[ordersController::class,'index']);
 Route::get('/users',[userController::class,'index']);
 Route::post('/users/profile',[profileController::class,'store']);
+Route::post('users/address',[profileController::class,'addAddress']);
+
 //auth routes
 Route::post('users/register',[authController::class,'store']);
-Route::post('users/address',[profileController::class,'addAddress']);
+Route::post('users/login',[authController::class,'login']);
 

@@ -14,7 +14,7 @@ class authController extends Controller
     public function store(Request $request){
         $request->validate([
             'name'=>'required',
-            'password'=>'required|min:6',
+            'password'=>'required|min:6|confirmed',
             'email'=>'required',
         ]);
 
@@ -32,5 +32,22 @@ class authController extends Controller
         }
 
 
+    }
+    public function login(Request $request){
+        $request->validate([
+            'email'=>'required|string',
+            'password'=>'required|string'
+        ]);
+        $user = User::where('email',$request->email)->first();
+        if(count($user)>0){
+            if(Hash::make($request->get('password'))==$user->passwords){
+                $token = $user->createToken('token-name')->plainTextToken;
+                return $this->success($token);
+            }else{
+                return $this->error(null,'Wrong Credentials',401);
+            }
+        }else{
+            return $this->error(null,'User not found',401);
+        }
     }
 }
