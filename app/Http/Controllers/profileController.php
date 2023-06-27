@@ -14,8 +14,9 @@ class profileController extends Controller
     use HttpResponses;
     public function store(Request $request){
         $request->validate([
-            'phone_number'=>'required|min:10|max:10',
+            'phone_number'=>'required|min:10|max:10|unique:profiles',
             'preferred_payment'=>'required',
+            'card_number'=>'unique:profiles',
         ]);
 
         $user = User::find($request->user_id);

@@ -14,20 +14,21 @@ return new class extends Migration
         // 'code_id','brand','model','common_name','img_id'
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('code_id');
+            $table->unsignedBigInteger('subcategory_id');
             $table->string('brand');
             $table->string('model');
-            $table->decimal('price',5,2);
+            $table->float('price',10,2);
             $table->string('product_code')->unique();
             $table->string('bar_code')->nullable();
             $table->string('common_name');
             $table->text('description');
+            $table->string('size')->nullable();
             $table->string('warrant')->nullable();
             $table->string('sku')->nullable();
             $table->string('dimension')->nullable();
             $table->string('availability')->nullable();
-            $table->foreign('code_id')
-                    ->references('id')->on('categories')
+            $table->foreign('subcategory_id')
+                    ->references('id')->on('subcategories')
                     ->onDelete('cascade');
             $table->timestamps();
         });

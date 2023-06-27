@@ -16,11 +16,18 @@ class ProductsResource extends JsonResource
     {
         return [
             'id'=>(string)$this->id,
-            'category'=>$this->category,
-            'description'=>'PRODUCT DESCRIPTION',
-            'price'=>$this->price,
+            'subcategory'=>$this->subcategory,
+            'category'=>$this->subcategory->category,
+            'description'=>$this->description,
+            'price'=>(float)$this->price,
             'size'=>$this->size,
             'images'=>$this->images,
+            'ratings'=>$this->ratings,
+            'sku'=>(string)$this->sku,
+            'warrant'=>(string)$this->warrant,
+            'availability'=>(string)$this->warrant,
+            'dimension'=>(string)$this->dimension,
+            'bar_code'=>(string)$this->bar_code,
 
         ];
     }
