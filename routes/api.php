@@ -6,6 +6,8 @@ use App\Http\Controllers\productController;
 use App\Http\Controllers\productImagesController;
 use App\Http\Controllers\ordersController;
 use App\Http\Controllers\profileController;
+use App\Http\Controllers\ratingsController;
+
 use App\Http\Controllers\userController;
 use App\Http\Controllers\authController;
 use App\Http\Controllers\categoriesController;
@@ -46,7 +48,8 @@ Route::get('categories/all', [categoriesController::class,'index']);
 //subcategory routes
 Route::post('subcategories/create', [subcategoriesController::class,'store']);
 Route::get('subcategories/all', [subcategoriesController::class,'index']);
-
+//rating routes
+Route::post('rating/create', [ratingsController::class,'store']);
 //auth routes
 Route::post('users/register',[authController::class,'store']);
 Route::post('users/login',[authController::class,'login']);
