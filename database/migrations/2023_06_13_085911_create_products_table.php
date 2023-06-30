@@ -27,6 +27,10 @@ return new class extends Migration
             $table->string('sku')->nullable();
             $table->string('dimension')->nullable();
             $table->string('availability')->nullable();
+            $table->decimal('discount',5,2)->nullable();
+            $table->string('tags')->nullable();
+            $table->decimal('offset',5,2)->nullable();
+
             $table->foreign('subcategory_id')
                     ->references('id')->on('subcategories')
                     ->onDelete('cascade');
