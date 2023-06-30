@@ -30,7 +30,7 @@ return new class extends Migration
             $table->decimal('discount',5,2)->nullable();
             $table->string('tags')->nullable();
             $table->decimal('offset',5,2)->nullable();
-
+            $table->text('options')->nullable();
             $table->foreign('subcategory_id')
                     ->references('id')->on('subcategories')
                     ->onDelete('cascade');

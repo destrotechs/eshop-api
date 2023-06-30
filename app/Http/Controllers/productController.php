@@ -20,7 +20,9 @@ class productController extends Controller
     }
     public function product(Product $product){
         if($product){
-            return $this->success($product,'Request was completed successfully');
+            // return $product->subcategory_id;
+            $similar_products = ProductsResource::collection(Product::where('subcategory_id',$product->subcategory_id)->get());
+            return $this->success(array("product"=>$product,"similar_products"=>$similar_products),'Request was completed successfully');
         }
         return $this->error(null,'The requested product could not be found',404);
     }
@@ -31,7 +33,7 @@ class productController extends Controller
             'brand'=>'required',
             'model'=>'required',
             'common_name'=>'required',
-            'description'=>'required',
+            'description'=>'required|string',
             'product_code'=>'required|unique:products',
             'price'=>'required',
         ]);
@@ -47,6 +49,8 @@ class productController extends Controller
         $product->availability = $request->availability;
         $product->bar_code = $request->bar_code;
         $product->description = $request->description;
+        $product->options = $request->options;
+
         $product->product_code = $request->product_code;
         $product->price = $request->price;
 
