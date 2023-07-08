@@ -14,6 +14,7 @@ return new class extends Migration
         // 'code_id','brand','model','common_name','img_id'
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->softDeletes();
             $table->unsignedBigInteger('subcategory_id');
             $table->string('brand');
             $table->string('model');
