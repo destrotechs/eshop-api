@@ -45,7 +45,7 @@ class authController extends Controller
             $user = User::where('email',$request->email)->first();
             $user->tokens()->delete();
             $token = $user->createToken('token-name')->plainTextToken;
-            return $this->success($token);
+            return $this->success(['accessToken'=>$token,'user'=>$user]);
         }else{
             return $this->error(null,'Wrong Credentials',401);
         }

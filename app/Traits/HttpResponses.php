@@ -11,7 +11,7 @@ trait HttpResponses{
         ], $code);
     }
 
-    protected function error($data=null,$message='There was an error performing the action',$code){
+    protected function error($data=null,$message='There was an error performing the action',$code=401){
         return response()->json([
             'status' => 'Request failed ....',
             'message'=>$message,
