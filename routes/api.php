@@ -7,11 +7,13 @@ use App\Http\Controllers\productImagesController;
 use App\Http\Controllers\ordersController;
 use App\Http\Controllers\profileController;
 use App\Http\Controllers\ratingsController;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\userController;
 use App\Http\Controllers\authController;
 use App\Http\Controllers\categoriesController;
 use App\Http\Controllers\subcategoriesController;
+use Illuminate\Support\Facades\Log;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,7 +26,11 @@ use App\Http\Controllers\subcategoriesController;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    $data = ['user'=>Auth::user()];
+    // $token = $request->bearerToken();
+
+    // Log::info('Received token:', ['token' => $token]);
+    return response()->json($data);
 });
 
 

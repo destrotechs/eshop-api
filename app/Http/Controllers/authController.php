@@ -43,6 +43,7 @@ class authController extends Controller
         if (Auth::attempt($credentials)) {
             // Authentication passed, redirect the user to a desired location
             $user = User::where('email',$request->email)->first();
+            // $user = Auth::user();
             $user->tokens()->delete();
             $token = $user->createToken('token-name')->plainTextToken;
             return $this->success(['accessToken'=>$token,'user'=>$user]);
