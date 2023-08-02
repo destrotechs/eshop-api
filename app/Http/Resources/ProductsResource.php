@@ -28,6 +28,8 @@ class ProductsResource extends JsonResource
             'availability'=>(string)$this->warrant,
             'dimension'=>(string)$this->dimension,
             'bar_code'=>(string)$this->bar_code,
+            'name'=>(string)$this->common_name,
+
 
         ];
     }
