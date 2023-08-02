@@ -33,15 +33,15 @@ class productImagesController extends Controller
 
         //upload image
         if($product){
-            // return $request->file('img');
-            $path = Storage::putFile(storage_path('/product_images'),$request->file('img'));
-            //end upload
-            $img = new ProductImage();
-            $img->img_url = $path;//should be path where image is stored
+            $img = $request->file('img');
+            $imgname = time().'.'.$img->getClientOriginalExtension();
+            $img->move(public_path('images'),$imgname);
+
+            $imgs = new ProductImage();
+            $imgs->img_url = 'images/'.$imgname;//should be path where image is stored
 
 
-            $added = $product->images()->save($img);
-
+            $added = $product->images()->save($imgs);
             if($added) {
                 return $this->success($img,'Image was added successfully');
             }else{
