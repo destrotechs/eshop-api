@@ -18,5 +18,8 @@ class Order extends Model
     public function items(){
         return $this->hasMany('App\Models\OrderItem','order_id');
     }
+    public function address(){
+        return $this->belongsTo('App\Models\Address','address_id');
+    }
 
 }

@@ -38,7 +38,7 @@ class productImagesController extends Controller
             $img->move(public_path('images'),$imgname);
 
             $imgs = new ProductImage();
-            $imgs->img_url = 'images/'.$imgname;//should be path where image is stored
+            $imgs->img_url = '/images/'.$imgname;//should be path where image is stored
 
 
             $added = $product->images()->save($imgs);
