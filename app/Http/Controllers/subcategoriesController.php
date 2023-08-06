@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\subcategory;
 use App\Models\Category;
 use App\Traits\HttpResponses;
-
+use App\Http\Resources\subcategoryResource;
 class subcategoriesController extends Controller
 {
     use HttpResponses;
@@ -15,7 +15,7 @@ class subcategoriesController extends Controller
      */
     public function index()
     {
-        $subcategories = subcategory::all();
+        $subcategories = subcategoryResource::collection(subcategory::all());
         return $this->success($subcategories,'subcategories fetched successfully');
     }
 
@@ -37,7 +37,7 @@ class subcategoriesController extends Controller
         $category = Category::find($request->category_id);
 
         if($category->subcategories()->save($subcategory)){
-            return $this->success($subcategory,'success');
+            return $this->success($subcategory,'Subcategory added successfully');
         }else{
             return $this->error($request->all(),'There was an error creating the subcategory',401);
         }
