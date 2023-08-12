@@ -16,6 +16,8 @@ class subcategoryResource extends JsonResource
     {
         return [
             'subcategory_code'=>$this->subcategory_code,
+            'id'=>$this->id,
+
             'subcategory_name'=>$this->subcategory_name,
             'category'=>$this->category,
         ];
