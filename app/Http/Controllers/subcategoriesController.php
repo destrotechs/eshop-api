@@ -7,9 +7,12 @@ use App\Models\subcategory;
 use App\Models\Category;
 use App\Traits\HttpResponses;
 use App\Http\Resources\subcategoryResource;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class subcategoriesController extends Controller
 {
     use HttpResponses;
+    use SoftDeletes;
     /**
      * Display a listing of the resource.
      */
@@ -50,7 +53,13 @@ class subcategoriesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $subc = subcategory::find($id);
+        if($subc){
+            $record =  new subcategoryResource($subc);
+            return $this->success($record,"Subcategory fetched successfully");
+        }else{
+            return $this->error(null,'The subcategory could not be found');
+        }
     }
 
     /**
@@ -58,7 +67,18 @@ class subcategoriesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'subcategory_code'=>'required|unique:subcategories',
+            'subcategory_name'=>'required',
+        ]);
+        $subc = subcategory::find($id);
+
+        $updated = $subc->update(['subcategory_code'=>$request->subcategory_code??$subc->subcategory_code, 'subcategory_name'=>$request->subcategory_name??$subc->subcategory_name,'category_id'=>$request->category_id??$subc->category_id]);
+        if($updated){
+            return $this->success($updated,"Subcategory updated successfully");
+        }else{
+            return $this->error(null,"There was a problem updating the subcategory");
+        }
     }
 
     /**
@@ -66,6 +86,12 @@ class subcategoriesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $subc = subcategory::find($id);
+        $del = $subc->delete();
+        if($del){
+            return $this->success($del,"Subcategory deleted successfully");
+        }else{
+            return $this->error(null,"There was a problem deleting the subcategory");
+        }
     }
 }

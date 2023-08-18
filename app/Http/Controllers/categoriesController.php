@@ -52,6 +52,7 @@ class categoriesController extends Controller
     {
         $category = Category::find($id);
         if($category){
+            
             return $this->success($category,"Category fetched successfully");
 
         }else{
