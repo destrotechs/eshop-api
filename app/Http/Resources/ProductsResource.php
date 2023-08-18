@@ -14,6 +14,7 @@ class ProductsResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $stock = $this->stock==null?0:$this->stock->sum('quantity_added');
         return [
             'id'=>(string)$this->id,
             'subcategory'=>$this->subcategory,
@@ -29,7 +30,7 @@ class ProductsResource extends JsonResource
             'dimension'=>(string)$this->dimension,
             'bar_code'=>(string)$this->bar_code,
             'name'=>(string)$this->common_name,
-
+            'stock'=>$stock,
 
         ];
     }

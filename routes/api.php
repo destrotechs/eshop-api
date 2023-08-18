@@ -13,6 +13,8 @@ use App\Http\Controllers\userController;
 use App\Http\Controllers\authController;
 use App\Http\Controllers\categoriesController;
 use App\Http\Controllers\subcategoriesController;
+use App\Http\Controllers\StockController;
+
 use Illuminate\Support\Facades\Log;
 /*
 |--------------------------------------------------------------------------
@@ -67,4 +69,7 @@ Route::post('rating/create', [ratingsController::class,'store']);
 //auth routes
 Route::post('users/register',[authController::class,'store']);
 Route::post('users/login',[authController::class,'login']);
+
+//stocks
+Route::post('stocks/create', [StockController::class,'store']);
 

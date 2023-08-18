@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->double('quantity_added')->nullable();
-            $table->double('quantity_removed')->nullable();
+            $table->double('quantity_added');
+            $table->string('unit_of_measure')->default('pieces');
+
             $table->date('date_altered');
             $table->timestamps();
         });
