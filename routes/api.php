@@ -51,6 +51,11 @@ Route::post('users/address',[profileController::class,'addAddress']);
 //category routes
 Route::post('categories/create', [categoriesController::class,'store']);
 Route::get('categories/all', [categoriesController::class,'index']);
+Route::get('category/{id}', [categoriesController::class,'show']);
+
+Route::put('/category/{id}',[categoriesController::class,'update']);
+Route::post('/category/{id}',[categoriesController::class,'destroy']);
+
 //subcategory routes
 Route::post('subcategories/create', [subcategoriesController::class,'store']);
 Route::get('subcategories/all', [subcategoriesController::class,'index']);
