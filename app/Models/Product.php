@@ -21,4 +21,8 @@ class Product extends Model
     {
         return $this->hasMany('App\Models\ProductImage');
     }
+    public function stock()
+    {
+        return $this->hasMany('App\Models\Stock');
+    }
 }
