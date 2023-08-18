@@ -72,4 +72,39 @@ class productController extends Controller
         }
         return $this->error($keyword,'Not product could be found',404);
     }
+    public function update(Request $request,String $id)
+    {
+        $product = Product::find($id);
+        $update = $product->update([
+            'common_name' =>$request->common_name??$product->common_name,
+            'subcategory_id'=>$request->subcategory_id??$product->subcategory_id,
+            'model'=>$request->model??$product->model,
+            'brand'=>$request->brand??$product->brand,
+            'sku'=>$request->sku??$product->sku,
+            'warrant'=>$request->warrant??$product->warrant,
+            'size'=>$request->size??$product->size,
+            'dimension'=>$request->dimension??$product->dimension,
+            'description'=>$request->description??$product->description,
+            'availability'=>$request->description??$product->description,
+            'product_code'=>$request->product_code??$product->product_code,
+            'options'=>$request->options??$product->options,
+            'price'=>$request->price??$product->price,
+            'bar_code'=>$request->bar_code??$product->bar_code,
+        ]);
+
+        if($update){
+            return $this->success($product,"Product updated successfully");
+        }else{
+            return $this->error($product,"Product could not be updated");
+        }
+    }
+    public function destroy(Request $request,$id){
+        $product = Product::find($id);
+        $del = $product->delete();
+        if($del){
+            return $this->success($product,"Product deleted successfully");
+        }else{
+            return $this->error($product,"Product could not be deleted");
+        }
+    }
 }

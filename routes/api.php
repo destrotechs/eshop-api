@@ -44,6 +44,9 @@ Route::get('/products',[productController::class,'index']);
 Route::get('/products/{product}',[productController::class,'product']);
 Route::post('/products/create',[productController::class,'store']);
 Route::post('/product/images',[productImagesController::class,'store']);
+Route::put('/product/{id}',[productController::class,'update']);
+Route::delete('/product/{id}',[productController::class,'destroy']);
+
 // Route::resource('orders', 'ordersController');
 Route::get('/orders',[ordersController::class,'index']);
 Route::get('/users',[userController::class,'index']);
