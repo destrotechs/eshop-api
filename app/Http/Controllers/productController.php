@@ -21,8 +21,9 @@ class productController extends Controller
     public function product(Product $product){
         if($product){
             // return $product->subcategory_id;
+            $prd = new ProductsResource($product);
             $similar_products = ProductsResource::collection(Product::where('subcategory_id',$product->subcategory_id)->get());
-            return $this->success(array("product"=>$product,"similar_products"=>$similar_products),'Request was completed successfully');
+            return $this->success(array("product"=>$prd,"similar_products"=>$similar_products),'Request was completed successfully');
         }
         return $this->error(null,'The requested product could not be found',404);
     }
