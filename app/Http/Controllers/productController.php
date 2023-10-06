@@ -18,7 +18,8 @@ class productController extends Controller
             return $this->success($products,'Request was completed successfully');
         }
     }
-    public function product(Product $product){
+    public function product(Request $request){
+        $product = Product::find($request->product);
         if($product){
             // return $product->subcategory_id;
             $prd = new ProductsResource($product);

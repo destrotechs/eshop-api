@@ -17,6 +17,7 @@ class ProductsResource extends JsonResource
         $stock = $this->stock==null?0:$this->stock->sum('quantity_added');
         return [
             'id'=>(string)$this->id,
+            'product_code'=>(string)$this->product_code,
             'subcategory'=>$this->subcategory,
             'category'=>$this->subcategory->category,
             'description'=>$this->description,
