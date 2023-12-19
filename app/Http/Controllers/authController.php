@@ -29,6 +29,8 @@ class authController extends Controller
 
         if($user){
             return $this->success($token);
+        }else{
+            return $this->error($user,"User could not be created",500);
         }
 
 
