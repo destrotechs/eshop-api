@@ -49,9 +49,17 @@ Route::delete('/product/{id}',[productController::class,'destroy']);
 
 // Route::resource('orders', 'ordersController');
 Route::get('/orders',[ordersController::class,'index']);
-Route::get('/users',[userController::class,'index']);
+Route::get('/customers',[userController::class,'customers']);
+Route::get('/users',[userController::class,'users']);
+Route::get('/rights/all',[userController::class,'rights']);
+Route::get('/user/roles',[userController::class,'user_roles']);
+Route::get('/role/rights',[userController::class,'rolerights']);
+Route::post('/roles',[userController::class,'addroles']);
 Route::post('/users/profile',[profileController::class,'store']);
 Route::post('users/address',[profileController::class,'addAddress']);
+Route::post('user/assign/roles',[userController::class,'assign_user_roles']);
+Route::post('role/assign/rights',[userController::class,'assignrights']);
+Route::post('/rights',[userController::class,'addRights']);
 
 //category routes
 Route::post('categories/create', [categoriesController::class,'store']);
@@ -75,4 +83,5 @@ Route::post('users/login',[authController::class,'login']);
 
 //stocks
 Route::post('stocks/create', [StockController::class,'store']);
+Route::get('stocks/fetch/{product_id}', [StockController::class,'ProductStock']);
 

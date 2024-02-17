@@ -34,19 +34,24 @@ class productImagesController extends Controller
         //upload image
         if($product){
             $img = $request->file('img');
-            $imgname = time().'.'.$img->getClientOriginalExtension();
-            $img->move(public_path('images'),$imgname);
-
-            $imgs = new ProductImage();
-            $imgs->img_url = '/images/'.$imgname;//should be path where image is stored
-
-
-            $added = $product->images()->save($imgs);
-            if($added) {
-                return $this->success($img,'Image was added successfully');
+            if(in_array($img->getClientOriginalExtension(),array('jpg','jpeg','png'))){
+                $imgname = time().'.'.$img->getClientOriginalExtension();
+                $img->move(public_path('images'),$imgname);
+    
+                $imgs = new ProductImage();
+                $imgs->img_url = '/images/'.$imgname;//should be path where image is stored
+    
+    
+                $added = $product->images()->save($imgs);
+                if($added) {
+                    return $this->success($img,'Image was added successfully');
+                }else{
+                    return $this->error($request->all(),'There was a problem adding the image',401);
+                }
             }else{
-                return $this->error($request->all(),'There was a problem adding the image',401);
+                return $this->error(null,"The image format is not allowed",401);
             }
+            
         }else{
             return $this->error(null,'The selected product could not be found',404);
         }

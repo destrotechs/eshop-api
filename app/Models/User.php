@@ -53,4 +53,10 @@ class User extends Authenticatable
     public function addresses(){
         return $this->hasMany('App\Models\Address','user_id');
     }
+    
+    
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role', 'role_users', 'user_id', 'role_id');
+    }
 }

@@ -87,7 +87,7 @@ class productController extends Controller
             'size'=>$request->size??$product->size,
             'dimension'=>$request->dimension??$product->dimension,
             'description'=>$request->description??$product->description,
-            'availability'=>$request->description??$product->description,
+            'availability'=>$request->availability??$product->availability,
             'product_code'=>$request->product_code??$product->product_code,
             'options'=>$request->options??$product->options,
             'price'=>$request->price??$product->price,

@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\usertype;
+use App\Models\UsertypeList;
+use App\Models\Role;
+use App\Models\RoleUser;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -23,16 +27,19 @@ class authController extends Controller
         $user->password = Hash::make($request->get('password'));
         $user->email = $request->get('email');
 
+         
+        $role = $request->role_id?Role::find($request->role_id):Role::where('role_name','customer')->first();
+        
         $user->save();
 
+        $user->roles()->attach($role);
         $token = $user->createToken('token-name')->plainTextToken;
 
         if($user){
-            return $this->success($token);
+            return $this->success($token, "User created successfully");
         }else{
             return $this->error($user,"User could not be created",500);
-        }
-
+        }       
 
     }
     public function login(Request $request){
@@ -50,7 +57,7 @@ class authController extends Controller
             $token = $user->createToken('token-name')->plainTextToken;
             return $this->success(['accessToken'=>$token,'user'=>$user]);
         }else{
-            return $this->error(null,'Wrong Credentials',401);
+            return $this->error(null,'Wrong Credentials',201);
         }
 
     }

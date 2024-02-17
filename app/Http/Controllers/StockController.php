@@ -24,6 +24,16 @@ class StockController extends Controller
         }
 
     }
+    public function ProductStock(Request $request,$product_id)
+    {
+        $stocks = Stock::with('product')->where('product_id','=',$product_id)->get();
+        if($stocks){
+            return $this->success($stocks,"Stocks fetched successfully");
+        }else{
+            return $this->error($stocks,"Stocks not found");
+        }
+
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -31,9 +41,9 @@ class StockController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'product_id'=>'required',
             'quantity_added'=>'required|numeric',
             'unit_of_measure'=>'required',
+            'product_id'=>'required',
         ]);
         $stock =  new Stock();
         $stock->quantity_added = $request->quantity_added;

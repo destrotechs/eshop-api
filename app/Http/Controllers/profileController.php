@@ -28,6 +28,8 @@ class profileController extends Controller
         // 1|TuhOK49ZRtLoj3YQirOIu0HxxqcPD2lo7RykEMJu
         $user->profile()->save($profile);
 
+       
+
         return $this->success($user);
     }
 
