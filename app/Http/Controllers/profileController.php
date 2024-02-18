@@ -17,6 +17,7 @@ class profileController extends Controller
             'phone_number'=>'required|min:10|max:10|unique:profiles',
             'preferred_payment'=>'required',
             'card_number'=>'unique:profiles',
+            'user_id'=>'required:unique:profiles',
         ]);
 
         $user = User::find($request->user_id);
@@ -36,6 +37,7 @@ class profileController extends Controller
     public function addAddress(Request $request){
         $request->validate([
             'shipping_address'=>'required|string',
+            'user_id'=>'required',
         ]);
 
         $user = User::find($request->user_id);
@@ -48,4 +50,6 @@ class profileController extends Controller
 
         return $this->success($address,'Address added successfully');
     }
+
+
 }

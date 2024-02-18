@@ -59,4 +59,13 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Role', 'role_users', 'user_id', 'role_id');
     }
+    /**
+     * Get all of the payment_modes for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payment_modes()
+    {
+        return $this->belongsToMany('App\Models\PaymentMode', 'user_payment_modes', 'user_id', 'payment_mode_id');
+    }
 }

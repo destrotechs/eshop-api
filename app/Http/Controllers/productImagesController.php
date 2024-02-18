@@ -34,7 +34,7 @@ class productImagesController extends Controller
         //upload image
         if($product){
             $img = $request->file('img');
-            if(in_array($img->getClientOriginalExtension(),array('jpg','jpeg','png'))){
+            if(in_array($img->getClientOriginalExtension(),array('jpg','jpeg','png','jfif'))){
                 $imgname = time().'.'.$img->getClientOriginalExtension();
                 $img->move(public_path('images'),$imgname);
     
