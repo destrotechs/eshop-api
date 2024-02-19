@@ -86,3 +86,9 @@ Route::post('users/login',[authController::class,'login']);
 Route::post('stocks/create', [StockController::class,'store']);
 Route::get('stocks/fetch/{product_id}', [StockController::class,'ProductStock']);
 
+
+//payment modes
+Route::get('/payments/modes', [userController::class,'getPaymentModes']);
+Route::post('/payments/modes', [userController::class,'addPaymentMode']);
+Route::get('/payments/modes/details/{payment_mode_id}', [userController::class,'getPaymentModeDetails']);
+

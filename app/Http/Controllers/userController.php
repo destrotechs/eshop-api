@@ -8,12 +8,15 @@ use App\Http\Resources\UserResource;
 use App\Http\Resources\usertypesResource;
 use App\Http\Resources\RoleRightsResource;
 use App\Http\Resources\UserRoleResource;
+use App\Http\Resources\PaymentModesResource;
+use App\Http\Resources\PaymentModesDetailsResource;
 use App\Http\Resources\RightsResource;
 use App\Traits\HttpResponses;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\RoleRight;
+use App\Models\PaymentMode;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Right;
 class userController extends Controller
@@ -118,9 +121,28 @@ class userController extends Controller
 
     public function addPaymentMode(Request $request){
         $request->validate([
-            'user_id'=>'required',
-            
+            'payment_mode_name'=>'required',
+            'payment_mode_details'=>'required',            
         ]);
-    }
+        $mode  =  new PaymentMode([
+            'payment_mode_details'=>$request->payment_mode_details,
+            'payment_mode_name'=>$request->payment_mode_name,
+        ]);
 
+        $mode->save();
+
+        return $this->success($mode,"Payment Mode has been added successfully",200);
+    }
+    public function getPaymentModes(){
+        $payment_modes = PaymentModesResource::collection(PaymentMode::all());
+        return $this->success($payment_modes,"Payment Modes Fetched Successfully");
+    }
+    public function getPaymentModeDetails(Request $request){
+        if($request->payment_mode_id){
+            $mode = PaymentMode::findOrFail($request->payment_mode_id);
+            $details = new PaymentModesDetailsResource($mode);
+            return $this->success($details,$mode->payment_mode_name." Details fetched successfully");
+        }
+        return $this->error(null,"The selected payment mode is invalid");
+    }
 }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentMode extends Model
 {
     use HasFactory;
-    protected $fillable = ['payment_mode_details','payment_mode'];
+    protected $fillable = ['payment_mode_details','payment_mode_name'];
 
     /*
     * Get the user that owns the PaymentMode
