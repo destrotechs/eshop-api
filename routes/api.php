@@ -14,6 +14,7 @@ use App\Http\Controllers\authController;
 use App\Http\Controllers\categoriesController;
 use App\Http\Controllers\subcategoriesController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\cartController;
 
 use Illuminate\Support\Facades\Log;
 /*
@@ -57,6 +58,7 @@ Route::get('/users/roles',[userController::class,'user_roles']);
 Route::get('/role/rights',[userController::class,'rolerights']);
 Route::post('/roles',[userController::class,'addroles']);
 Route::post('/users/profile',[profileController::class,'store']);
+Route::put('/users/profile',[profileController::class,'updateProfile']);
 Route::post('users/address',[profileController::class,'addAddress']);
 Route::post('user/assign/roles',[userController::class,'assign_user_roles']);
 Route::post('role/assign/rights',[userController::class,'assignrights']);
@@ -92,3 +94,7 @@ Route::get('/payments/modes', [userController::class,'getPaymentModes']);
 Route::post('/payments/modes', [userController::class,'addPaymentMode']);
 Route::get('/payments/modes/details/{payment_mode_id}', [userController::class,'getPaymentModeDetails']);
 
+//cart
+
+Route::post('/shopping/cart', [cartController::class,'addToCart']);
+Route::get('/shopping/cart/{user_id}', [cartController::class,'viewCart']);

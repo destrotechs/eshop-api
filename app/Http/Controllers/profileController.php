@@ -33,6 +33,20 @@ class profileController extends Controller
 
         return $this->success($user);
     }
+    public function updateProfile(Request $request){
+        if($request->isJson()){
+            $profile = Profile::findOrFail($request->id);
+            $profile->phone_number=$request->phoneNumber??$profile->phone_number;
+            $profile->card_number=$request->cardNumber??$profile->card_number;
+            $profile->cvv=$request->cvv??$profile->cvv;
+            $profile->locale=$request->locale??$profile->locale;
+
+            $profile->update();
+
+            return $this->success($profile,"Profile details updated successfully");
+        }
+        return $this->error(null,"Only json data is accepted",401);
+    }
 
     public function addAddress(Request $request){
         $request->validate([
