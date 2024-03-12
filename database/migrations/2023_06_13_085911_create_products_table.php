@@ -28,8 +28,10 @@ return new class extends Migration
             $table->string('sku')->nullable();
             $table->string('dimension')->nullable();
             $table->string('availability')->nullable();
+            $table->string('discount_type')->nullable();
             $table->decimal('discount',5,2)->nullable();
             $table->string('tags')->nullable();
+            $table->string('offset_type')->nullable();
             $table->decimal('offset',5,2)->nullable();
             $table->text('options')->nullable();
             $table->foreign('subcategory_id')
