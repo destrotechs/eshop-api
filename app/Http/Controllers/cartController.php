@@ -13,11 +13,12 @@ class cartController extends Controller
         
     }
     public function addToCart(Request $request){
+    session_start();
+
         $request->validate([
             'user_id'=>'required',
             'product_id'=>'required',
         ]);
-
         $product = Product::findOrFail($request->product_id);
         $rowNumber = random_int(100000,100000000000);
         // add the product to cart
@@ -34,6 +35,6 @@ class cartController extends Controller
     }
     public function viewCart(Request $request){
         // dd(session()->all());
-        return $this->success(\Cart::session($request->user_id)->getContent(),"cart fetched successfully");
+        return $this->success(\Cart::session($request->user_id)->getSubTotal(),"cart fetched successfully");
     }
 }

@@ -30,11 +30,11 @@ class productImagesController extends Controller
             'img'=>'required',
         ]);
         $product = Product::find($request->product_id);
-
+        $allowed_formats = array('jpg','jpeg','png');
         //upload image
         if($product){
             $img = $request->file('img');
-            if(in_array($img->getClientOriginalExtension(),array('jpg','jpeg','png','jfif'))){
+            if(in_array($img->getClientOriginalExtension(),$allowed_formats)){
                 $imgname = time().'.'.$img->getClientOriginalExtension();
                 $img->move(public_path('images'),$imgname);
     
@@ -49,7 +49,7 @@ class productImagesController extends Controller
                     return $this->error($request->all(),'There was a problem adding the image',401);
                 }
             }else{
-                return $this->error(null,"The image format is not allowed",401);
+                return $this->error(null,"The image format is not allowed , use ".implode(',',$allowed_formats),401);
             }
             
         }else{

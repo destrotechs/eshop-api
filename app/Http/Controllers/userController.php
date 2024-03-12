@@ -85,6 +85,16 @@ class userController extends Controller
 
     
 }
+public function remove_user_roles(Request $request){
+   
+    $user = User::findOrFail($request->user_id);
+    if($user){
+        $user->roles()->detach($request->role_id);
+
+        return $this->success($user,'Role removed successfully');
+    }
+    return $this->error(null,"User could not be found");
+}
 
     public function addRights(Request $request){
         $request->validate([

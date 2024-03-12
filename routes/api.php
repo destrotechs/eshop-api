@@ -63,6 +63,7 @@ Route::post('users/address',[profileController::class,'addAddress']);
 Route::post('user/assign/roles',[userController::class,'assign_user_roles']);
 Route::post('role/assign/rights',[userController::class,'assignrights']);
 Route::post('/rights',[userController::class,'addRights']);
+Route::post('/roles/remove',[userController::class,'remove_user_roles']);
 
 //category routes
 Route::post('categories/create', [categoriesController::class,'store']);
