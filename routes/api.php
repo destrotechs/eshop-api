@@ -99,3 +99,4 @@ Route::get('/payments/modes/details/{payment_mode_id}', [userController::class,'
 Route::post('/shopping/cart', [cartController::class,'addToCart']);
 
 Route::get('/shopping/cart/{user_id}', [cartController::class,'viewCart']);
+Route::post('/orders/add/', [ordersController::class,'store']);
