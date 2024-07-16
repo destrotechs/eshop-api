@@ -5,15 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Traits\HttpResponses;
-
+use Illuminate\Support\Facades\Auth;
 class cartController extends Controller
 {
     use HttpResponses;
+
     public function index(){
         
     }
     public function addToCart(Request $request){
-    session_start();
 
         $request->validate([
             'user_id'=>'required',
@@ -34,7 +34,13 @@ class cartController extends Controller
         return $this->success(\Cart::session($request->user_id)->getContent(),"Item added to cart successfully");
     }
     public function viewCart(Request $request){
+        // dd(Auth::user());
         // dd(session()->all());
-        return $this->success(\Cart::session($request->user_id)->getSubTotal(),"cart fetched successfully");
+        // if (session_status() == PHP_SESSION_ACTIVE) {
+        //     return 'Session is active';
+        // } else {
+        //     return 'Session has not started';
+        // }
+        return $this->success(\Cart::session($request->user_id)->getContent(),"cart fetched successfully");
     }
 }

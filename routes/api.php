@@ -96,6 +96,6 @@ Route::post('/payments/modes', [userController::class,'addPaymentMode']);
 Route::get('/payments/modes/details/{payment_mode_id}', [userController::class,'getPaymentModeDetails']);
 
 //cart
-
 Route::post('/shopping/cart', [cartController::class,'addToCart']);
+
 Route::get('/shopping/cart/{user_id}', [cartController::class,'viewCart']);
