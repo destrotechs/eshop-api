@@ -23,4 +23,8 @@ class Role extends Model
     {
         return $this->belongsToMany('App\Models\User', 'role_users', 'role_id', 'user_id');
     }
+    public function hasRight($right)
+    {
+        return $this->rights()->where('right_to', $right)->exists();
+    }
 }

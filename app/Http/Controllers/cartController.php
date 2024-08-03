@@ -34,13 +34,7 @@ class cartController extends Controller
         return $this->success(\Cart::session($request->user_id)->getContent(),"Item added to cart successfully");
     }
     public function viewCart(Request $request){
-        // dd(Auth::user());
-        // dd(session()->all());
-        // if (session_status() == PHP_SESSION_ACTIVE) {
-        //     return 'Session is active';
-        // } else {
-        //     return 'Session has not started';
-        // }
         return $this->success(\Cart::session($request->user_id)->getContent(),"cart fetched successfully");
     }
+
 }

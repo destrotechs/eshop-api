@@ -68,4 +68,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\PaymentMode', 'user_payment_modes', 'user_id', 'payment_mode_id');
     }
+    public function hasRole($role)
+    {
+        return $this->roles()->where('role_name', $role)->exists();
+    }
 }

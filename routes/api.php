@@ -37,65 +37,83 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::group(['middleware' => 'auth:sanctum'], function () {
-    // Your authenticated API routes here
-});
-//products routes
-Route::get('/products',[productController::class,'index']);
-Route::get('/products/{product}',[productController::class,'product']);
-Route::post('/products/create',[productController::class,'store']);
-Route::post('/product/images',[productImagesController::class,'store']);
-Route::put('/product/{id}',[productController::class,'update']);
-Route::delete('/product/{id}',[productController::class,'destroy']);
-
-// Route::resource('orders', 'ordersController');
-Route::get('/orders',[ordersController::class,'index']);
-Route::get('/customers',[userController::class,'customers']);
-Route::get('/users',[userController::class,'users']);
-Route::get('/user/{user}',[userController::class,'user']);
-Route::get('/rights/all',[userController::class,'rights']);
-Route::get('/users/roles',[userController::class,'user_roles']);
-Route::get('/role/rights',[userController::class,'rolerights']);
-Route::post('/roles',[userController::class,'addroles']);
-Route::post('/users/profile',[profileController::class,'store']);
-Route::put('/users/profile',[profileController::class,'updateProfile']);
-Route::post('users/address',[profileController::class,'addAddress']);
-Route::post('user/assign/roles',[userController::class,'assign_user_roles']);
-Route::post('role/assign/rights',[userController::class,'assignrights']);
-Route::post('/rights',[userController::class,'addRights']);
-Route::post('/roles/remove',[userController::class,'remove_user_roles']);
-
-//category routes
-Route::post('categories/create', [categoriesController::class,'store']);
-Route::get('categories/all', [categoriesController::class,'index']);
-Route::get('category/{id}', [categoriesController::class,'show']);
-Route::put('/category/{id}',[categoriesController::class,'update']);
-Route::delete('/category/{id}',[categoriesController::class,'destroy']);
-
-//subcategory routes
-Route::post('subcategories/create', [subcategoriesController::class,'store']);
-Route::get('subcategories/all', [subcategoriesController::class,'index']);
-Route::get('subcategory/{id}', [subcategoriesController::class,'show']);
-Route::put('/subcategory/{id}',[subcategoriesController::class,'update']);
-Route::delete('subcategory/{id}', [subcategoriesController::class,'destroy']);
-
-//rating routes
-Route::post('rating/create', [ratingsController::class,'store']);
 //auth routes
 Route::post('users/register',[authController::class,'store']);
 Route::post('users/login',[authController::class,'login']);
 
-//stocks
-Route::post('stocks/create', [StockController::class,'store']);
-Route::get('stocks/fetch/{product_id}', [StockController::class,'ProductStock']);
+// Route::resource('orders', 'ordersController');
 
-
-//payment modes
-Route::get('/payments/modes', [userController::class,'getPaymentModes']);
-Route::post('/payments/modes', [userController::class,'addPaymentMode']);
-Route::get('/payments/modes/details/{payment_mode_id}', [userController::class,'getPaymentModeDetails']);
 
 //cart
 Route::post('/shopping/cart', [cartController::class,'addToCart']);
 
 Route::get('/shopping/cart/{user_id}', [cartController::class,'viewCart']);
+Route::post('/orders/add/', [ordersController::class,'store']);
+
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    //category routes
+    Route::post('categories/create', [categoriesController::class,'store']);
+    Route::get('categories/all', [categoriesController::class,'index']);
+    Route::get('category/{id}', [categoriesController::class,'show']);
+    Route::put('/category/{id}',[categoriesController::class,'update']);
+    Route::delete('/category/{id}',[categoriesController::class,'destroy']);
+
+    //subcategory routes
+    Route::post('subcategories/create', [subcategoriesController::class,'store']);
+    Route::get('subcategories/all', [subcategoriesController::class,'index']);
+    Route::get('subcategory/{id}', [subcategoriesController::class,'show']);
+    Route::put('/subcategory/{id}',[subcategoriesController::class,'update']);
+    Route::delete('subcategory/{id}', [subcategoriesController::class,'destroy']);
+
+    //rating routes
+    Route::post('rating/create', [ratingsController::class,'store']);
+    
+    //payment modes
+    // Route::get('/payments/modes', [userController::class,'getPaymentModes']);
+    Route::post('/payments/modes', [userController::class,'addPaymentMode']);
+    Route::get('/payments/modes/details/{payment_mode_id}', [userController::class,'getPaymentModeDetails']);
+
+    Route::get('/payments/modes', [userController::class,'getPaymentModes']);
+    Route::get('/orders',[ordersController::class,'index']);
+    Route::get('/customers',[userController::class,'customers']);
+    Route::get('/users',[userController::class,'users']);
+    Route::get('/user/{user}',[userController::class,'user']);
+    Route::get('/rights/all',[userController::class,'rights']);
+    Route::get('/users/roles',[userController::class,'user_roles']);
+    Route::get('/role/rights',[userController::class,'rolerights']);
+    Route::post('/roles',[userController::class,'addroles']);
+    Route::post('/users/profile',[profileController::class,'store']);
+    Route::put('/users/profile',[profileController::class,'updateProfile']);
+    Route::post('users/address',[profileController::class,'addAddress']);
+    Route::post('user/assign/roles',[userController::class,'assign_user_roles']);
+    Route::post('role/assign/rights',[userController::class,'assignrights']);
+    Route::post('/rights',[userController::class,'addRights']);
+    Route::post('/roles/remove',[userController::class,'remove_user_roles']);
+    //products routes
+    Route::get('/products',[productController::class,'index']);
+    Route::get('/products/{product}',[productController::class,'product']);
+    Route::post('/products/create',[productController::class,'store']);
+    Route::post('/product/images',[productImagesController::class,'store']);
+    Route::put('/product/{id}',[productController::class,'update']);
+    Route::delete('/product/{id}',[productController::class,'destroy']);
+    //stocks
+    Route::post('stocks/create', [StockController::class,'store']);
+    Route::get('stocks/fetch/{product_id}', [StockController::class,'ProductStock']);
+
+    Route::get('/orders',[ordersController::class,'index']);
+    Route::get('/customers',[userController::class,'customers']);
+    Route::get('/users',[userController::class,'users']);
+    Route::get('/user/{user}',[userController::class,'user']);
+    Route::get('/rights/all',[userController::class,'rights']);
+    Route::get('/users/roles',[userController::class,'user_roles']);
+    Route::get('/role/rights',[userController::class,'rolerights']);
+    Route::post('/roles',[userController::class,'addroles']);
+    Route::post('/users/profile',[profileController::class,'store']);
+    Route::put('/users/profile',[profileController::class,'updateProfile']);
+    Route::post('users/address',[profileController::class,'addAddress']);
+    Route::post('user/assign/roles',[userController::class,'assign_user_roles']);
+    Route::post('role/assign/rights',[userController::class,'assignrights']);
+    Route::post('/rights',[userController::class,'addRights']);
+    Route::post('/roles/remove',[userController::class,'remove_user_roles']);                                                                                                           
+
+});
