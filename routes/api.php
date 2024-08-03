@@ -48,6 +48,7 @@ Route::post('users/login',[authController::class,'login']);
 Route::post('/shopping/cart', [cartController::class,'addToCart']);
 
 Route::get('/shopping/cart/{user_id}', [cartController::class,'viewCart']);
+<<<<<<< HEAD
 Route::post('/orders/add/', [ordersController::class,'store']);
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
@@ -117,3 +118,6 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/roles/remove',[userController::class,'remove_user_roles']);                                                                                                           
 
 });
+=======
+Route::post('/orders/add/', [ordersController::class,'store']);
+>>>>>>> 45c695216855fe9b05b32c26796688c738399e76
