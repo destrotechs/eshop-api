@@ -53,7 +53,8 @@ class ordersController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $order = Order::findOrFail($id);
+        return $this->success(new OrderResource($order),"Order fetched successfuly");
     }
 
     /**

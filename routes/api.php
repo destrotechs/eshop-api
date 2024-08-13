@@ -101,6 +101,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('stocks/fetch/{product_id}', [StockController::class,'ProductStock']);
 
     Route::get('/orders',[ordersController::class,'index']);
+    Route::get('/order/{id}',[ordersController::class,'show']);
     Route::get('/customers',[userController::class,'customers']);
     Route::get('/users',[userController::class,'users']);
     Route::get('/user/{user}',[userController::class,'user']);
