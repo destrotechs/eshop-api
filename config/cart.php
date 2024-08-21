@@ -83,4 +83,8 @@ return [
     'action_groups_order' => [
         // 'example_action_group_name'
     ],
+    'storage' => 'database',
+    'database' => [
+        'table' => 'shopping_carts',
+    ],
 ];

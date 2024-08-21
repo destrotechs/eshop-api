@@ -14,16 +14,14 @@ class cartController extends Controller
         
     }
     public function addToCart(Request $request){
-
+        $user = $request->user();
         $request->validate([
-            'user_id'=>'required',
             'product_id'=>'required',
         ]);
         $product = Product::findOrFail($request->product_id);
-        $rowNumber = random_int(100000,100000000000);
-        // add the product to cart
-        \Cart::session($request->user_id)->add(array(
-            'id' => $rowNumber,
+
+        \Cart::add(array(
+            'id' => $product->id,
             'name' => $product->common_name,
             'price' => $product->price,
             'quantity' => 1,
@@ -31,10 +29,17 @@ class cartController extends Controller
             'associatedModel' => $product,
         ));
 
-        return $this->success(\Cart::session($request->user_id)->getContent(),"Item added to cart successfully");
+        return $this->success(\Cart::getContent(),"Item added to cart successfully");
     }
     public function viewCart(Request $request){
-        return $this->success(\Cart::session($request->user_id)->getContent(),"cart fetched successfully");
+        $user = $request->user();
+        // \Cart::clear();
+        // \Cart::session($user->id)->clear();
+        $cart = \Cart::getContent();
+        if(!$user){
+            return $this->error(null,'User not authenticated','Token not provided or invalid');
+        }
+        return $this->success($cart,"cart fetched successfully");
     }
 
 }

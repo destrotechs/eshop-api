@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Traits\HttpResponses;
 use App\Models\subcategory;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 
 class productController extends Controller
 {
@@ -20,10 +22,31 @@ class productController extends Controller
     }
     public function product(Request $request){
         $product = Product::find($request->product);
+        $user = $request->user();
+        // return $request->user();
+
         if($product){
             // return $product->subcategory_id;
             $prd = new ProductsResource($product);
             $similar_products = ProductsResource::collection(Product::where('subcategory_id',$product->subcategory_id)->get());
+           
+            if ($user){
+                try{
+                    DB::table('last_viewed_products')->insert([
+                        'user_id' => $user->id,
+                        'product_id' => $product->id,
+                    ]);
+
+                }catch(QueryException $e){
+                    if ($e->getCode() === '23000') {
+                        // Ignore the exception
+                    } else {
+                        // Optionally rethrow the exception if it's not the one you want to ignore
+                        throw $e;
+                    }
+                };
+                
+            }
             return $this->success(array("product"=>$prd,"similar_products"=>$similar_products),'Request was completed successfully');
         }
         return $this->error(null,'The requested product could not be found',404);

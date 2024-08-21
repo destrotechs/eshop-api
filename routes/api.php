@@ -15,6 +15,7 @@ use App\Http\Controllers\categoriesController;
 use App\Http\Controllers\subcategoriesController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\cartController;
+use App\Http\Controllers\dashboardController;
 
 use Illuminate\Support\Facades\Log;
 /*
@@ -41,27 +42,34 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('users/register',[authController::class,'store']);
 Route::post('users/login',[authController::class,'login']);
 
-// Route::resource('orders', 'ordersController');
-
+// routes without need  for authentication
+Route::get('categories/all', [categoriesController::class,'index']);
+Route::get('/products',[productController::class,'index']);
+Route::get('/products/{product}',[productController::class,'product']);
+Route::get('subcategories/all', [subcategoriesController::class,'index']);
+Route::get('subcategory/{id}', [subcategoriesController::class,'show']);
 
 //cart
-Route::post('/shopping/cart', [cartController::class,'addToCart']);
 
-Route::get('/shopping/cart/{user_id}', [cartController::class,'viewCart']);
-Route::post('/orders/add/', [ordersController::class,'store']);
-
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::post('/shopping/cart', [cartController::class,'addToCart']);
+    Route::get('/user/{user}',[userController::class,'user']);
+    Route::get('/dashboard/index',[dashboardController::class,'index']);
+    Route::get('/shopping/cart/', [cartController::class,'viewCart']);
+    Route::post('/orders/add/', [ordersController::class,'store']);
+    
+});
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     //category routes
     Route::post('categories/create', [categoriesController::class,'store']);
-    Route::get('categories/all', [categoriesController::class,'index']);
+   
     Route::get('category/{id}', [categoriesController::class,'show']);
     Route::put('/category/{id}',[categoriesController::class,'update']);
     Route::delete('/category/{id}',[categoriesController::class,'destroy']);
 
     //subcategory routes
     Route::post('subcategories/create', [subcategoriesController::class,'store']);
-    Route::get('subcategories/all', [subcategoriesController::class,'index']);
-    Route::get('subcategory/{id}', [subcategoriesController::class,'show']);
+    
     Route::put('/subcategory/{id}',[subcategoriesController::class,'update']);
     Route::delete('subcategory/{id}', [subcategoriesController::class,'destroy']);
 
@@ -90,8 +98,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/rights',[userController::class,'addRights']);
     Route::post('/roles/remove',[userController::class,'remove_user_roles']);
     //products routes
-    Route::get('/products',[productController::class,'index']);
-    Route::get('/products/{product}',[productController::class,'product']);
+    
     Route::post('/products/create',[productController::class,'store']);
     Route::post('/product/images',[productImagesController::class,'store']);
     Route::put('/product/{id}',[productController::class,'update']);
@@ -104,7 +111,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/order/{id}',[ordersController::class,'show']);
     Route::get('/customers',[userController::class,'customers']);
     Route::get('/users',[userController::class,'users']);
-    Route::get('/user/{user}',[userController::class,'user']);
+   
     Route::get('/rights/all',[userController::class,'rights']);
     Route::get('/users/roles',[userController::class,'user_roles']);
     Route::get('/role/rights',[userController::class,'rolerights']);
@@ -117,4 +124,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/rights',[userController::class,'addRights']);
     Route::post('/roles/remove',[userController::class,'remove_user_roles']);                                                                                                           
 
+});
+Route::get('/debug-session', function () {
+    return session()->all();
 });
