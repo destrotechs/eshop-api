@@ -18,7 +18,7 @@ class dashboardController extends Controller
         $last_viewed = DB::table('last_viewed_products')
             ->where('user_id', $user->id)
             ->pluck('product_id');
-            $last_viewed_products = Product::whereIn('id', $last_viewed)->get();
+            $last_viewed_products = Product::whereIn('id', $last_viewed)->orderBy('created_at', 'desc')->get();
             $viewed_products = ProductsResource::collection($last_viewed_products);
         return $this->success(array('last_viewed_products' =>$viewed_products));
     }

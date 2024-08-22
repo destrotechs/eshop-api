@@ -30,7 +30,7 @@ class productImagesController extends Controller
             'img'=>'required',
         ]);
         $product = Product::find($request->product_id);
-        $allowed_formats = array('jpg','jpeg','png','jfif');
+        $allowed_formats = array('jpg','jpeg','png','jfif','webp');
         //upload image
         if($product){
             $img = $request->file('img');

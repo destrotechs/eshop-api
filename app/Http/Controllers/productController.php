@@ -28,13 +28,15 @@ class productController extends Controller
         if($product){
             // return $product->subcategory_id;
             $prd = new ProductsResource($product);
-            $similar_products = ProductsResource::collection(Product::where('subcategory_id',$product->subcategory_id)->get());
+            $similar_products = ProductsResource::collection(Product::where('subcategory_id',$product->subcategory_id)->whereNotIn('id',array($request->product))->get());
            
             if ($user){
                 try{
                     DB::table('last_viewed_products')->insert([
                         'user_id' => $user->id,
                         'product_id' => $product->id,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
                     ]);
 
                 }catch(QueryException $e){
@@ -90,10 +92,20 @@ class productController extends Controller
 
 
     }
-    public function search_products(Request $request,$keyword){
-        $products = Product::where(['common_name','like','%'.$keyword.'%'])->get();
+    public function search_products(Request $request){
+        $keyword = $request->keyword;
+        $products = Product::where('common_name','like','%'.$keyword.'%')->get();
         if(count($products)>0){
+            $products = ProductsResource::collection($products);
             return $this->success($products,'Searched products successfully');
+        }
+        return $this->error($keyword,'Not product could be found',404);
+    }
+    
+    public function search_suggestions(Request $request,$keyword){
+        $names = Product::where('common_name','like','%'.$keyword.'%')->pluck('common_name');
+        if(count($names)>0){
+            return $this->success($names,'Searched products successfully');
         }
         return $this->error($keyword,'Not product could be found',404);
     }

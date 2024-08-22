@@ -45,6 +45,8 @@ Route::post('users/login',[authController::class,'login']);
 // routes without need  for authentication
 Route::get('categories/all', [categoriesController::class,'index']);
 Route::get('/products',[productController::class,'index']);
+Route::post('/products/search',[productController::class,'search_products']);
+Route::get('/search/suggestions/{keyword}',[productController::class,'search_suggestions']);
 Route::get('/products/{product}',[productController::class,'product']);
 Route::get('subcategories/all', [subcategoriesController::class,'index']);
 Route::get('subcategory/{id}', [subcategoriesController::class,'show']);
