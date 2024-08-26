@@ -15,22 +15,15 @@ return [
     |
     */
 
-    'paths' => ['api/*'],
+    'paths' => ['/*','sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
-
-    'allowed_origins_patterns' => [],
-
-    'allowed_headers' => ['*'],
-
-    'exposed_headers' => [],
-
-    'max_age' => 0,
+    'allowed_origins' => ['http://localhost:3000'],
 
     'supports_credentials' => true,
-
+    'allowed_headers' => ['*'],
+    // 'exposed_headers' => ['*'],
     'api' => [
         \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
     ],

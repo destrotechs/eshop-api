@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('shopping_carts', function (Blueprint $table) {
             $table->increments('id'); // Primary key
-            $table->string('cart_id', 36); // Unique cart ID
+            // $table->string('cart_id', 36); // Unique cart ID
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->text('content'); // Serialized cart content
+            $table->timestamps();
+        });
+
+        Schema::create('wishlists', function (Blueprint $table) {
+            $table->increments('id'); // Primary key
+            // $table->string('cart_id', 36); // Unique cart ID
             $table->integer('user_id')->unsigned()->nullable();
             $table->text('content'); // Serialized cart content
             $table->timestamps();
@@ -26,5 +34,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('shopping_carts');
+        Schema::dropIfExists('wishlists');
     }
 };
