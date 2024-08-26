@@ -65,9 +65,10 @@ class cartController extends Controller
                 if ($productExists) {
                     return $this->success($wishlistItems, "Item is already in the wishlist.");
                 }
-    
+                
                 // Add the product to the wishlist
-                $cart->addToCart($product);
+                $prd = new ProductsResource($product);
+                $cart->addToCart($prd);
     
                 return $this->success($cart->fetchCart(), "Item added to wishlist successfully");
             }
