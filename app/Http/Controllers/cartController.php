@@ -95,5 +95,17 @@ class cartController extends Controller
         $cart = new Cart('wishlist',null,$user);    
         return $this->success($cart->getCartSummary(),"wishlist fetched successfully");
     }
+    public function removeFromWishlist(Request $request){
+        $user = $request->user();
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+        ]);
+        if(!$user){
+            return $this->error(null,'User not authenticated,Token not provided or invalid');
+        }
+        $cart = new Cart('wishlist',null,$user);
+        $cart->removeFromCart($request->product_id);
+        return $this->success($cart->getCartSummary(),"wishlist fetched successfully");
+    }
 
 }

@@ -60,6 +60,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/dashboard/index',[dashboardController::class,'index']);
     Route::get('/shopping/cart/', [cartController::class,'viewCart']);
     Route::get('/shopping/wishlist/', [cartController::class,'viewWishlist']);
+    Route::post('/shopping/wishlist/remove', [cartController::class,'removeFromWishlist']);
     Route::post('/orders/add/', [ordersController::class,'store']);
     
 });
