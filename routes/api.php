@@ -55,10 +55,12 @@ Route::get('subcategory/{id}', [subcategoriesController::class,'show']);
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/shopping/cart', [cartController::class,'addToCart']);
+    Route::put('/shopping/quantity', [cartController::class,'updateQuantity']);
     Route::post('/shopping/wishlist', [cartController::class,'addToWishList']);
     Route::get('/user/{user}',[userController::class,'user']);
     Route::get('/dashboard/index',[dashboardController::class,'index']);
     Route::get('/shopping/cart/', [cartController::class,'viewCart']);
+    Route::post('/shopping/cart/remove', [cartController::class,'removeFromCart']);
     Route::get('/shopping/wishlist/', [cartController::class,'viewWishlist']);
     Route::post('/shopping/wishlist/remove', [cartController::class,'removeFromWishlist']);
     Route::post('/orders/add/', [ordersController::class,'store']);

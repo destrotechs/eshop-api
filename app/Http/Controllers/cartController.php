@@ -56,14 +56,14 @@ class cartController extends Controller
                 // Check if the product already exists in the wishlist
                 $productExists = false;
                 foreach ($wishlistItems as $item) {
-                    if (isset($item['product_id']) && ($item['product_id'] == $product->id)) {
+                    if (array_key_exists($request->product_id, array_keys($item))) {
                         $productExists = true;
                         break;
                     }
                 }
     
                 if ($productExists) {
-                    return $this->success($wishlistItems, "Item is already in the wishlist.");
+                    return $this->error($wishlistItems, "Item is already in the wishlist.",204);
                 }
                 
                 // Add the product to the wishlist
@@ -95,6 +95,18 @@ class cartController extends Controller
         $cart = new Cart('wishlist',null,$user);    
         return $this->success($cart->getCartSummary(),"wishlist fetched successfully");
     }
+    public function removeFromCart(Request $request){
+        $user = $request->user();
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+        ]);
+        if(!$user){
+            return $this->error(null,'User not authenticated,Token not provided or invalid');
+        }
+        $cart = new Cart('shopping_cart',null,$user);
+        $cart->removeFromCart($request->product_id);
+        return $this->success($cart->getCartSummary(),"Item removed from cart successfully");
+    }
     public function removeFromWishlist(Request $request){
         $user = $request->user();
         $request->validate([
@@ -105,7 +117,26 @@ class cartController extends Controller
         }
         $cart = new Cart('wishlist',null,$user);
         $cart->removeFromCart($request->product_id);
-        return $this->success($cart->getCartSummary(),"wishlist fetched successfully");
+        return $this->success($cart->getCartSummary(),"Item removed from wishlist successfully");
+    }
+    public function updateQuantity(Request $request){
+        $user = $request->user();
+        $request->validate([
+            'product_id' =>'required|exists:products,id',
+            'quantity' =>'required|integer',
+        ]);
+        if(!$user){
+            return $this->error(null,'User not authenticated,Token not provided or invalid');
+        }
+        $product = Product::findOrFail($request->product_id);
+
+            if($product){
+                $prd = new ProductsResource($product);
+                $cart = new Cart('shopping_cart',null,$user);
+                $cart->addToCart($prd,$request->quantity);
+                return $this->success($cart->fetchCart(),"Quantity changed successfully");
+            }
+        return $this->success($cart->getCartSummary(),"cart fetched successfully");
     }
 
 }
