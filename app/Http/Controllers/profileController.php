@@ -50,19 +50,32 @@ class profileController extends Controller
 
     public function addAddress(Request $request){
         $request->validate([
-            'shipping_address'=>'required|string',
-            'user_id'=>'required',
+            'address'=>'required|string',
         ]);
 
-        $user = User::find($request->user_id);
+        $user = $request->user();
 
         $address = new Address(
-            ['shipping_address'=>$request->shipping_address],
+            ['shipping_address'=>$request->address],
         );
 
         $user->addresses()->save($address);
 
         return $this->success($address,'Address added successfully');
+    }
+    public function removeAddress(Request $request, $address){
+        $user = $request->user();
+        if($user){
+            $address = Address::find($address);
+            if($address){
+                $address->delete();
+                return $this->success($address,'Address removed successfully');
+            }
+        }else{
+            return $this->error(null,"User not found",404);
+        }
+        
+
     }
 
 

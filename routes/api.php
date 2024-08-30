@@ -64,6 +64,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/shopping/wishlist/', [cartController::class,'viewWishlist']);
     Route::post('/shopping/wishlist/remove', [cartController::class,'removeFromWishlist']);
     Route::post('/orders/add/', [ordersController::class,'store']);
+    Route::post('/users/profile',[profileController::class,'store']);
+    Route::put('/users/profile',[profileController::class,'updateProfile']);
+    Route::post('users/address',[profileController::class,'addAddress']);
+    Route::delete('users/address/{address}',[profileController::class,'removeAddress']);
+    Route::get('/payments/modes/details/{payment_mode_id}', [userController::class,'getPaymentModeDetails']);
+
+    Route::get('/payments/modes', [userController::class,'getPaymentModes']);
     
 });
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
@@ -86,9 +93,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     //payment modes
     // Route::get('/payments/modes', [userController::class,'getPaymentModes']);
     Route::post('/payments/modes', [userController::class,'addPaymentMode']);
-    Route::get('/payments/modes/details/{payment_mode_id}', [userController::class,'getPaymentModeDetails']);
-
-    Route::get('/payments/modes', [userController::class,'getPaymentModes']);
+    
     Route::get('/orders',[ordersController::class,'index']);
     Route::get('/customers',[userController::class,'customers']);
     Route::get('/users',[userController::class,'users']);
@@ -97,9 +102,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/users/roles',[userController::class,'user_roles']);
     Route::get('/role/rights',[userController::class,'rolerights']);
     Route::post('/roles',[userController::class,'addroles']);
-    Route::post('/users/profile',[profileController::class,'store']);
-    Route::put('/users/profile',[profileController::class,'updateProfile']);
-    Route::post('users/address',[profileController::class,'addAddress']);
+    
     Route::post('user/assign/roles',[userController::class,'assign_user_roles']);
     Route::post('role/assign/rights',[userController::class,'assignrights']);
     Route::post('/rights',[userController::class,'addRights']);
