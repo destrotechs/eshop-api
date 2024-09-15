@@ -19,5 +19,8 @@ class PaymentMode extends Model
     {
         return $this->belongsToMany('App\Models\User', 'role_users', 'payment_mode_id', 'user_id');
     }
+    public function payments(){
+        return $this->hasMany('App\Models\Payment');
+    }
     
 }

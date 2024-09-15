@@ -21,5 +21,8 @@ class Order extends Model
     public function address(){
         return $this->belongsTo('App\Models\Address','address_id');
     }
+    public function payment(){
+        return $this->belongsTo('App\Models\Payment','order_id');
+    }
 
 }

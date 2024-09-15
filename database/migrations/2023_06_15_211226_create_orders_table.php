@@ -17,12 +17,12 @@ return new class extends Migration
             $table->softDeletes();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('address_id');
-            $table->decimal('total_cost',5,2)->nullable();
+            $table->decimal('total_cost',10,2)->nullable();
             $table->foreign('user_id')
                     ->references('id')->on('users')
                     ->onDelete('cascade');
-            $table->decimal('vat',5,2)->nullable();
-            $table->decimal('discount',5,2)->nullable();
+            $table->decimal('vat',10,2)->nullable();
+            $table->decimal('discount',10,2)->nullable();
             $table->string('served_by')->nullable();
             $table->foreign('address_id')
                     ->references('id')->on('addresses')
