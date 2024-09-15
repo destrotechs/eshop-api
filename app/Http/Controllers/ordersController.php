@@ -51,7 +51,7 @@ class ordersController extends Controller
             $order_items->items = json_encode($request->cart['items']);
 
             if($order->items()->save($order_items)){
-                // $cart->clearCart();
+                $cart->clearCart();
                 return $this->success(new OrderResource($order),"Order added successfully");
             }
         }
