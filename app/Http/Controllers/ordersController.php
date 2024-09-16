@@ -43,6 +43,7 @@ class ordersController extends Controller
             $order->order_number = $order_number;
             $order->address_id = $address_id;
             $order->user_id = $user_id;
+            $order->status = 'Created';
             $order->payment_mode_id = $request->payment_mode;
             $order->total_cost= $request->cart['total'];
             $order->vat= $request->cart['tax'];
