@@ -15,17 +15,16 @@ class ratingsController extends Controller
     public function store(Request $request){
         $request->validate([
             'product_id'=>'required',
-            'user_id'=>'required',
-            'star_rate'=>'required',
+            'rating'=>'required',
         ]);
 
-        $user = User::find($request->user_id);
+        $user = $request->user();
         $product = Product::find($request->product_id);
 
         if($user && $product){
             $rating = new Rating();
-            $rating->star_rate = $request->star_rate;
-            $rating->user_id = $request->user_id;
+            $rating->star_rate = $request->rating;
+            $rating->user_id = $user->id;
             $rating->review = $request->review;
 
             $product->ratings()->save($rating);

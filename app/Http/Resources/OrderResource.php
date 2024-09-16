@@ -21,6 +21,7 @@ class OrderResource extends JsonResource
             'owner'=>$this->user,
             'items'=>$this->items,
             'shipping_address'=>$this->address,
+            'status'=>$this->status,
             'order_date'=>$this->date_created,
         ];
     }

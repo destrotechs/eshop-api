@@ -88,7 +88,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::delete('subcategory/{id}', [subcategoriesController::class,'destroy']);
 
     //rating routes
-    Route::post('rating/create', [ratingsController::class,'store']);
+    Route::post('review/add', [ratingsController::class,'store']);
     
     //payment modes
     // Route::get('/payments/modes', [userController::class,'getPaymentModes']);

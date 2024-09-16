@@ -24,6 +24,7 @@ return new class extends Migration
             $table->decimal('vat',10,2)->nullable();
             $table->decimal('discount',10,2)->nullable();
             $table->string('served_by')->nullable();
+            $table->string('status')->default('Created');
             $table->foreign('address_id')
                     ->references('id')->on('addresses')
                     ->onDelete('cascade');
