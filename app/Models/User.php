@@ -72,4 +72,7 @@ class User extends Authenticatable
     {
         return $this->roles()->where('role_name', $role)->exists();
     }
+    public function ratings(){
+        return $this->hasMany('App\Models\Rating','user_id');
+    }
 }

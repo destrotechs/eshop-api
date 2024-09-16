@@ -17,6 +17,7 @@ return new class extends Migration
             $table->softDeletes();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('address_id');
+            $table->unsignedBigInteger('payment_mode_id');
             $table->decimal('total_cost',10,2)->nullable();
             $table->foreign('user_id')
                     ->references('id')->on('users')
@@ -27,6 +28,9 @@ return new class extends Migration
             $table->string('status')->default('Created');
             $table->foreign('address_id')
                     ->references('id')->on('addresses')
+                    ->onDelete('cascade');
+            $table->foreign('payment_mode_id')
+                    ->references('id')->on('payment_modes')
                     ->onDelete('cascade');
             $table->timestamps();
         });

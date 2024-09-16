@@ -68,7 +68,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::put('/users/profile',[profileController::class,'updateProfile']);
     Route::post('users/address',[profileController::class,'addAddress']);
     Route::delete('users/address/{address}',[profileController::class,'removeAddress']);
-    Route::get('/payments/modes/details/{payment_mode_id}', [userController::class,'getPaymentModeDetails']);
+    Route::get('/paymentmodes/details/{payment_mode_id}', [userController::class,'getPaymentModeDetails']);
 
     Route::get('/payments/modes', [userController::class,'getPaymentModes']);
     

@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use App\Http\Resources\RatingsResource;
 class ProductsResource extends JsonResource
 {
     /**
@@ -26,7 +26,7 @@ class ProductsResource extends JsonResource
             'brand'=>$this->brand,
             'model'=>$this->model,
             'images'=>$this->images,
-            'ratings'=>$this->ratings,
+            'ratings'=> RatingsResource::collection($this->ratings),
             'sku'=>(string)$this->sku,
             'warrant'=>(string)$this->warrant,
             'availability'=>(string)$this->availability,
