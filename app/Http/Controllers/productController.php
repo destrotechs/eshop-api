@@ -28,7 +28,13 @@ class productController extends Controller
         if($product){
             // return $product->subcategory_id;
             $prd = new ProductsResource($product);
-            $similar_products = ProductsResource::collection(Product::where('subcategory_id',$product->subcategory_id)->whereNotIn('id',array($request->product))->get());
+            $similar_products = ProductsResource::collection(
+                Product::where('subcategory_id', $product->subcategory_id)
+                       ->whereNotIn('id', [$request->product]) // Ensure the current product is not included
+                       ->inRandomOrder() // Fetch records in random order
+                       ->take(8) // Limit the result to 8 records
+                       ->get()
+            );
            
             if ($user){
                 try{
