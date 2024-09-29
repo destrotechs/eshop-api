@@ -14,9 +14,15 @@ class ordersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = OrderResource::collection(Order::all());
+        $user = $request->user();
+        if ($user->hasRole('admin')) {
+            $orders = OrderResource::collection(Order::all());
+            return $this->success($orders,'Orders fetched successfully');
+        } else {
+            $orders = OrderResource::collection(Order::where('user_id', $user->id)->get());
+        }
         return $this->success($orders,'Orders fetched successfully');
     }
 

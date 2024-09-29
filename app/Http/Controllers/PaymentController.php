@@ -13,8 +13,9 @@ class PaymentController extends Controller
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $paymentIntent = PaymentIntent::create([
-            'amount' => 60000, // Amount in cents
+            'amount' => $request->amount, // Amount in cents
             'currency' => 'kes',
+            'payment_method' => 'pm_card_visa',
         ]);
 
         return response()->json(['clientSecret' => $paymentIntent->client_secret]);
