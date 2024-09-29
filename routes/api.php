@@ -16,6 +16,7 @@ use App\Http\Controllers\subcategoriesController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\cartController;
 use App\Http\Controllers\dashboardController;
+use App\Http\Controllers\PaymentController;
 
 use Illuminate\Support\Facades\Log;
 /*
@@ -71,6 +72,15 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/paymentmodes/details/{payment_mode_id}', [userController::class,'getPaymentModeDetails']);
 
     Route::get('/payments/modes', [userController::class,'getPaymentModes']);
+    Route::get('/orders',[ordersController::class,'index']);
+    Route::get('/order/{id}',[ordersController::class,'show']);
+    Route::get('/user/{user}',[userController::class,'user']);
+    Route::post('/users/profile',[profileController::class,'store']);
+    Route::put('/users/profile',[profileController::class,'updateProfile']);
+    Route::post('users/address',[profileController::class,'addAddress']);
+    Route::post('review/add', [ratingsController::class,'store']);
+
+
     
 });
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
@@ -88,16 +98,13 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::delete('subcategory/{id}', [subcategoriesController::class,'destroy']);
 
     //rating routes
-    Route::post('review/add', [ratingsController::class,'store']);
     
     //payment modes
     // Route::get('/payments/modes', [userController::class,'getPaymentModes']);
     Route::post('/payments/modes', [userController::class,'addPaymentMode']);
     
-    Route::get('/orders',[ordersController::class,'index']);
     Route::get('/customers',[userController::class,'customers']);
     Route::get('/users',[userController::class,'users']);
-    Route::get('/user/{user}',[userController::class,'user']);
     Route::get('/rights/all',[userController::class,'rights']);
     Route::get('/users/roles',[userController::class,'user_roles']);
     Route::get('/role/rights',[userController::class,'rolerights']);
@@ -117,8 +124,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('stocks/create', [StockController::class,'store']);
     Route::get('stocks/fetch/{product_id}', [StockController::class,'ProductStock']);
 
-    Route::get('/orders',[ordersController::class,'index']);
-    Route::get('/order/{id}',[ordersController::class,'show']);
+    
     Route::get('/customers',[userController::class,'customers']);
     Route::get('/users',[userController::class,'users']);
    
@@ -126,9 +132,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/users/roles',[userController::class,'user_roles']);
     Route::get('/role/rights',[userController::class,'rolerights']);
     Route::post('/roles',[userController::class,'addroles']);
-    Route::post('/users/profile',[profileController::class,'store']);
-    Route::put('/users/profile',[profileController::class,'updateProfile']);
-    Route::post('users/address',[profileController::class,'addAddress']);
+   
     Route::post('user/assign/roles',[userController::class,'assign_user_roles']);
     Route::post('role/assign/rights',[userController::class,'assignrights']);
     Route::post('/rights',[userController::class,'addRights']);
@@ -138,3 +142,4 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 Route::get('/debug-session', function () {
     return session()->all();
 });
+Route::post('/create-payment-intent', [PaymentController::class, 'createPaymentIntent']);
