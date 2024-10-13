@@ -34,46 +34,57 @@ class Cart
     }
 
     public function addToCart($product, $quantity = 1, $replaceQuantity = false)
-    {
-        // Fetch the existing cart
-        $existingCart = DB::table($this->getTable())->where('user_id', $this->userId)->first();
+{
+    $existingCart = DB::table($this->getTable())->where('user_id', $this->userId)->first();
 
-        if ($existingCart) {
-            $cartContent = json_decode($existingCart->content, true);
+    if ($existingCart) {
+        $cartContent = json_decode($existingCart->content, true);
 
-            if (isset($cartContent[$product->id])) {
-                if ($replaceQuantity) {
-                    $cartContent[$product->id]['quantity'] = $quantity;
-                } else {
-                    $cartContent[$product->id]['quantity'] += $quantity;
-                }
-                $cartContent[$product->id]['total'] = $cartContent[$product->id]['price'] * $cartContent[$product->id]['quantity'];
+        if (isset($cartContent[$product->id])) {
+            if ($replaceQuantity) {
+                $cartContent[$product->id]['quantity'] = $quantity;
             } else {
-                $cartContent[$product->id] = [
-                    'product' => $product,
-                    'quantity' => $quantity,
-                    'price' => $product->price,
-                    'total' => $product->price * $quantity
-                ];
+                $cartContent[$product->id]['quantity'] += $quantity;
             }
-
-            DB::table($this->getTable())->where('user_id', $this->userId)->update(['content' => json_encode($cartContent)]);
+            $cartContent[$product->id]['total'] = $cartContent[$product->id]['price']* $cartContent[$product->id]['quantity'];
         } else {
-            $cartContent = [
-                $product->id => [
-                    'product' => $product,
-                    'quantity' => $quantity,
-                    'price' => $product->price,
-                    'total' => $product->price * $quantity
-                ]
+            $cartContent[$product->id] = [
+                'product' => $product,
+                'quantity' => $quantity,
+                'price' => $product->price,
+                'discount' => $product->discount,  // Add product discount field
+                'total' => $product->price * $quantity
             ];
-
-            DB::table($this->getTable())->insert([
-                'user_id' => $this->userId,
-                'content' => json_encode($cartContent)
-            ]);
         }
+
+        DB::table($this->getTable())->where('user_id', $this->userId)->update(['content' => json_encode($cartContent)]);
+    } else {
+        $cartContent = [
+            $product->id => [
+                'product' => $product,
+                'quantity' => $quantity,
+                'price' => $product->price,
+                'discount' => $product->discount,  // Add product discount field
+                'total' => $product->price * $quantity 
+            ]
+        ];
+
+        DB::table($this->getTable())->insert([
+            'user_id' => $this->userId,
+            'content' => json_encode($cartContent)
+        ]);
     }
+}
+
+protected function calculateProductTotal($price, $discount, $quantity)
+{
+    // Apply the product's own discount (percentage)
+    $discountAmount = $price * ($discount / 100);
+    $priceAfterDiscount = $price - $discountAmount;
+
+    // Calculate total price for the product based on the discounted price and quantity
+    return $priceAfterDiscount * $quantity;
+}
 
     public function removeFromCart($productId)
     {
@@ -128,12 +139,33 @@ class Cart
     }
 
     public function calculateDiscount()
-    {
-        $subtotal = $this->getSubtotal();
-        $this->discount = $subtotal * ($this->discountRate / 100);
+{
+    $cartContent = $this->fetchCart();
+    $productDiscountTotal = 0;
 
-        return $this->discount;
+    // Calculate the total discount from per-item discounts
+    foreach ($cartContent as $item) {
+        $originalPrice = $item['price'];
+        $discount = $item['discount']; // Product-specific discount percentage
+        $quantity = $item['quantity'];
+
+        // Calculate the discount amount per item and multiply by quantity
+        $discountAmountPerItem = $originalPrice * ($discount / 100);
+        $totalDiscountForItem = $discountAmountPerItem * $quantity;
+
+        // Sum up the discount for each product
+        $productDiscountTotal += $totalDiscountForItem;
     }
+
+    // Calculate the cart-wide (wholesome) discount via coupon
+    $subtotalAfterProductDiscounts = $this->getSubtotal() - $productDiscountTotal;
+    $couponDiscount = $subtotalAfterProductDiscounts * ($this->discountRate / 100);
+
+    // Total discount is the sum of product-specific discounts and coupon discount
+    $totalDiscount = $productDiscountTotal + $couponDiscount;
+
+    return $totalDiscount;
+}
 
     public function calculateTax()
     {
