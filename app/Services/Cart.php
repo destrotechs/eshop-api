@@ -19,7 +19,7 @@ class Cart
         // Initialize cart type
         $this->cartType = $cartType;
         $this->userId = $user->id;
-        $this->taxRate = $taxRate;
+        $this->taxRate = 16;
         $this->discount = 0;
         $this->coupon = null;
         $this->discountRate = 0;
@@ -170,7 +170,7 @@ protected function calculateProductTotal($price, $discount, $quantity)
     public function calculateTax()
     {
         $subtotal = $this->getSubtotal() - $this->calculateDiscount();
-        $tax = $subtotal * $this->taxRate;
+        $tax = $subtotal * ($this->taxRate/100);
 
         return $tax;
     }

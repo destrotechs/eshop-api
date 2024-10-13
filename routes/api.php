@@ -17,6 +17,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\cartController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\couponController;
 
 use Illuminate\Support\Facades\Log;
 /*
@@ -79,6 +80,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::put('/users/profile',[profileController::class,'updateProfile']);
     Route::post('users/address',[profileController::class,'addAddress']);
     Route::post('review/add', [ratingsController::class,'store']);
+    Route::post('coupon/apply', [couponController::class,'applyCoupon']);
 
 
     
