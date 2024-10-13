@@ -34,6 +34,7 @@ class ProductsResource extends JsonResource
             'bar_code'=>(string)$this->bar_code,
             'name'=>(string)$this->common_name,
             'stock'=>$stock,
+            'options'=>explode(',',$this->options),
 
         ];
     }

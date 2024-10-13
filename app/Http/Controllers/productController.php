@@ -35,6 +35,7 @@ class productController extends Controller
                        ->take(8) // Limit the result to 8 records
                        ->get()
             );
+            
            
             if ($user){
                 try{
