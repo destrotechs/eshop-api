@@ -145,3 +145,5 @@ Route::get('/debug-session', function () {
     return session()->all();
 });
 Route::post('/create-payment-intent', [PaymentController::class, 'createPaymentIntent']);
+Route::get('/pay-via-mpesa', [PaymentController::class, 'mpesaPayment']);
+

@@ -1,0 +1,20 @@
+{
+    "name": "destrompesa/mpesa",
+    "description": "Mpesa payment intgration made easy!",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+      "psr-4": {
+        "destrompesa\\mpesa\\": "src/"
+      }
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "destrompesa\\mpesa\\MpesaServiceProvider"
+        ]
+      }
+    },
+    "require": {}
+  }
+  

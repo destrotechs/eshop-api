@@ -24,5 +24,8 @@ class Order extends Model
     public function payment(){
         return $this->belongsTo('App\Models\Payment','order_id');
     }
+    public function payment_mode(){
+        return $this->belongsTo('App\Models\PaymentMode','payment_mode_id');
+    }
 
 }
