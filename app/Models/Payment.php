@@ -11,6 +11,6 @@ class Payment extends Model
     protected $fillable = [ 'order_id','amount','currency','payment_mode_id','payment_id','paid_on','payment_details'];
 
     public function order(){
-        return $this->belongsTo('App\Models\Order');
+        return $this->belongsTo('App\Models\Order','order_id');
     }
 }

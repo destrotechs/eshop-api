@@ -3,7 +3,7 @@
 namespace destrompesa\mpesa;
 
 use Illuminate\Support\Facades\Http;
-
+use Illuminate\Support\Facades\Log;
 class Mpesa
 {
     /**
@@ -61,10 +61,15 @@ class Mpesa
      * @param string $phoneNumber The phone number to pay to.
      * @return mixed
      */
-    public function stkPush($amount, $phoneNumber)
+    public function express($amount, $phoneNumber)
     {
         if (substr($phoneNumber, 0, 1) === '0') {
             $phoneNumber = '254' . substr($phoneNumber, 1);
+        }
+        $amount = (float)$amount;
+
+        if ($amount <= 0) {
+            throw new \Exception('Amount must be greater than zero.');
         }
         // Generate an access token
         $tokenData = $this->generateAccessToken();
@@ -85,7 +90,7 @@ class Mpesa
             'Password' => $password,
             'Timestamp' => $timestamp,
             'TransactionType' => $transactionType,
-            'Amount' => $amount,
+            'Amount' => 1,
             'PartyA' => $phoneNumber, // Phone number of the sender
             'PartyB' => $businessShortCode, // Business shortcode
             'PhoneNumber' => $phoneNumber,
@@ -110,7 +115,58 @@ class Mpesa
             throw new \Exception('Unable to initiate payment: ' . $response->body());
         }
     }
+    public function checkExpressStatus($checkoutRequestId){
+        // Generate an access token
+        $tokenData = $this->generateAccessToken();
+        $accessToken = $tokenData['access_token'];
 
+        // Define the query STK push URL based on the environment
+        $environment = config('mpesa.environment');
+        $queryUrl = config("mpesa.api_urls.$environment.query_stk_push_url"); // URL for querying STK push status
 
-    // Additional methods for M-Pesa functionality can be added here
+        // Prepare the status check request payload
+        $payload = [
+            'BusinessShortCode' => config('mpesa.shortcode'), // Your M-Pesa shortcode
+            'Password' => base64_encode(config('mpesa.shortcode') . config('mpesa.lipa_na_mpesa_key') . date('yymdhis')), // Encode the password
+            'Timestamp' => date('yymdhis'), // Generate current timestamp
+            'CheckoutRequestID' => $checkoutRequestId, // Checkout request ID to check
+        ];
+
+        // Perform the HTTP request to check the status
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+            'Content-Type' => 'application/json',
+        ])->post($queryUrl, $payload);
+
+        // Log the response for debugging purposes
+        // Log::info('Check Status Response: ', ['response' => $response->body()]);
+
+        // Check for successful response and return it
+        if ($response->successful()) {
+            return json_decode($response->body(), true); // Return as an associative array
+        } else {
+            throw new \Exception('Unable to check payment status: ' . $response->body());
+        }
+
+    }
+    
+
+    public  function logMpesaResponse($data, $filePath)
+    {
+        // Check if the directory exists, if not, create it
+        if (!file_exists(dirname($filePath))) {
+            mkdir(dirname($filePath), 0755, true);
+        }
+
+        // Open the file in append mode
+        $fileHandle = fopen($filePath, 'w'); 
+
+        if ($fileHandle) {
+            // Write the JSON data to the file
+            fwrite($fileHandle, json_encode($data, JSON_PRETTY_PRINT) . PHP_EOL);
+            fclose($fileHandle); // Close the file handle
+        } else {
+            Log::error("Could not open file for writing: $filePath");
+        }
+    }
 }

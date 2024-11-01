@@ -23,7 +23,7 @@ class OrderResource extends JsonResource
             'shipping_address'=>$this->address,
             'status'=>$this->status,
             'order_date'=>$this->created_at,
-            'payment'=>$this->payment,
+            'payments'=>$this->payments,
             'payment_mode'=>$this->payment_mode,
         ];
     }

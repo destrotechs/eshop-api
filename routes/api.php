@@ -81,6 +81,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('users/address',[profileController::class,'addAddress']);
     Route::post('review/add', [ratingsController::class,'store']);
     Route::post('coupon/apply', [couponController::class,'applyCoupon']);
+    Route::post('/pay-via-mpesa', [PaymentController::class, 'mpesaPayment']);
+    Route::get('/products/{id}/user-review',[productController::class,'get_product_rating']);
+
 
 
     
@@ -145,5 +148,5 @@ Route::get('/debug-session', function () {
     return session()->all();
 });
 Route::post('/create-payment-intent', [PaymentController::class, 'createPaymentIntent']);
-Route::get('/pay-via-mpesa', [PaymentController::class, 'mpesaPayment']);
+Route::post('/mpesa/callback', [PaymentController::class, 'handleCallback']);
 

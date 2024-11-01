@@ -142,6 +142,26 @@ class productController extends Controller
             return $this->error($product,"Product could not be updated");
         }
     }
+    public function get_product_rating(Request $request, $id) {
+        $user = $request->user();
+        $product = Product::find($id);
+        
+        // Check if the user has a rating for the specified product
+        $rating = $product->ratings()->where('user_id', $user->id)->first();
+    
+        if ($rating) {
+            return $this->success([
+                'hasReview' => true,
+                'rating' => $rating
+            ], "Product rating retrieved successfully");
+        } else {
+            return $this->success([
+                'hasReview' => false
+            ], "No rating found for this product by the user");
+        }
+    }
+    
+    
     public function destroy(Request $request,$id){
         $product = Product::find($id);
         $del = $product->delete();

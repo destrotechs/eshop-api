@@ -47,6 +47,7 @@ return [
             'register_url' => 'https://sandbox.safaricom.co.ke/mpesa/registerurl/v1',
             'token_url' => 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials',
             'stk_push_url' => 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest',
+            'query_stk_push_url' => 'https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query',
             // Add other API endpoints as necessary
         ],
         'live' => [
@@ -68,7 +69,7 @@ return [
     */
 
     'callbacks' => [
-        'result_url' => env('MPESA_RESULT_URL', 'http://yourapp.com/mpesa/result'), // URL for transaction results
+        'result_url' => env('MPESA_RESULT_URL', 'https://d4e5-197-248-78-185.ngrok-free.app/api/mpesa/callback'), // URL for transaction results
         'validation_url' => env('MPESA_VALIDATION_URL', 'http://yourapp.com/mpesa/validation'), // URL for validation
     ],
 
