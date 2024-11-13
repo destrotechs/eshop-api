@@ -24,6 +24,7 @@ class ProductsResource extends JsonResource
             'price'=>(float)$this->price,
             'size'=>$this->size,
             'brand'=>$this->brand,
+            'tags'=>$this->tags,
             'model'=>$this->model,
             'images'=>$this->images,
             'ratings'=> RatingsResource::collection($this->ratings),

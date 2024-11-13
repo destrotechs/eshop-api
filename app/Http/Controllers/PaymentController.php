@@ -140,5 +140,9 @@ public function handleCallback(Request $request)
         return $this->error($rawPostData, "Failed to decode JSON", 400);
     }
 }
+public function register_callback_urls(Request $request){
+    $response = $this->mpesa->registerUrls();
+    return response()->json($response);
+}
 
 }

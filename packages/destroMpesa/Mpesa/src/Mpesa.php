@@ -169,4 +169,33 @@ class Mpesa
             Log::error("Could not open file for writing: $filePath");
         }
     }
+    public function registerUrls()
+    {
+        $environment = config('mpesa.environment');
+        $tokenData = $this->generateAccessToken();
+        $accessToken = $tokenData['access_token'];
+        // Set up the payload
+        $payload = [
+            "ShortCode" => 600998,
+            "ResponseType" => "Completed",
+            "ConfirmationURL" => config('mpesa.callbacks.confirmation_url'),
+            "ValidationURL" => config('mpesa.callbacks.validation_url'),
+        ];
+        $registerUrl = config("mpesa.api_urls.$environment.register_url");
+        // Send the request to M-Pesa
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->post($registerUrl, $payload);
+            
+        // Check response status and handle accordingly
+        if ($response->successful()) {
+            return response()->json(['status' => 'URLs registered successfully']);
+        } else {
+            return response()->json([
+                'error' => 'Failed to register URLs',
+                'details' => $response->json()
+            ], $response->status());
+        }
+    }
 }

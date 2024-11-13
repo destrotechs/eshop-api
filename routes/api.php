@@ -18,6 +18,7 @@ use App\Http\Controllers\cartController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\couponController;
+use App\Http\Controllers\mpesaController;
 
 use Illuminate\Support\Facades\Log;
 /*
@@ -52,6 +53,7 @@ Route::get('/search/suggestions/{keyword}',[productController::class,'search_sug
 Route::get('/products/{product}',[productController::class,'product']);
 Route::get('subcategories/all', [subcategoriesController::class,'index']);
 Route::get('subcategory/{id}', [subcategoriesController::class,'show']);
+Route::get('/products/featured/all', [productController::class,'get_featured_products']);
 
 //cart
 
@@ -71,6 +73,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('users/address',[profileController::class,'addAddress']);
     Route::delete('users/address/{address}',[profileController::class,'removeAddress']);
     Route::get('/paymentmodes/details/{payment_mode_id}', [userController::class,'getPaymentModeDetails']);
+  
 
     Route::get('/payments/modes', [userController::class,'getPaymentModes']);
     Route::get('/orders',[ordersController::class,'index']);
@@ -83,6 +86,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('coupon/apply', [couponController::class,'applyCoupon']);
     Route::post('/pay-via-mpesa', [PaymentController::class, 'mpesaPayment']);
     Route::get('/products/{id}/user-review',[productController::class,'get_product_rating']);
+    Route::get('/register_urls',[PaymentController::class,'register_callback_urls']);
 
 
 
@@ -148,5 +152,8 @@ Route::get('/debug-session', function () {
     return session()->all();
 });
 Route::post('/create-payment-intent', [PaymentController::class, 'createPaymentIntent']);
-Route::post('/mpesa/callback', [PaymentController::class, 'handleCallback']);
+Route::post('/callback', [PaymentController::class, 'handleCallback']);
+Route::post('/validation', [mpesaController::class, 'validation']);
+Route::post('/confirmation', [mpesaController::class, 'confirmation']);
+
 

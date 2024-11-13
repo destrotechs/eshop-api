@@ -44,7 +44,7 @@ return [
     'api_urls' => [
         'sandbox' => [
             'base' => 'https://sandbox.safaricom.co.ke/',
-            'register_url' => 'https://sandbox.safaricom.co.ke/mpesa/registerurl/v1',
+            'register_url' => 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl',
             'token_url' => 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials',
             'stk_push_url' => 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest',
             'query_stk_push_url' => 'https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query',
@@ -69,8 +69,9 @@ return [
     */
 
     'callbacks' => [
-        'result_url' => env('MPESA_RESULT_URL', 'https://d4e5-197-248-78-185.ngrok-free.app/api/mpesa/callback'), // URL for transaction results
-        'validation_url' => env('MPESA_VALIDATION_URL', 'http://yourapp.com/mpesa/validation'), // URL for validation
+        'result_url' => env('MPESA_RESULT_URL', 'https://df10-197-248-78-185.ngrok-free.app/api/callback'), // URL for transaction results
+        'validation_url' => env('MPESA_VALIDATION_URL', 'https://df10-197-248-78-185.ngrok-free.app/validation'), // URL for validation
+        'confirmation_url' => env('MPESA_CONFIRMATION_URL', 'https://df10-197-248-78-185.ngrok-free.app/confirmation'), // URL for confirmation
     ],
 
 ];

@@ -160,6 +160,22 @@ class productController extends Controller
             ], "No rating found for this product by the user");
         }
     }
+    public function get_featured_products(Request $request) {
+        // Get products where 'tags' contains 'featured'
+        $products = Product::where('tags', 'like', '%featured%')->get();
+        
+        // Wrap products in a resource collection
+        
+        // Check if there are any products
+        if ($products->isNotEmpty()) {
+            $products = ProductsResource::collection($products);
+            return $this->success($products, 'Featured products fetched successfully');
+        }
+    
+        // If no products found
+        return $this->error(null, 'No featured products found', 200);
+    }
+    
     
     
     public function destroy(Request $request,$id){
