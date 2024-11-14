@@ -26,24 +26,29 @@ class categoriesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_code' =>'required|unique:categories',
-            'category_name' =>'required',
+            'category_code' => 'required|unique:categories',
+            'category_name' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate the image if provided
         ]);
 
         $category = new Category();
         $category->category_code = $request->category_code;
         $category->category_name = $request->category_name;
 
-        if($category->save()){
-            return $this->success($category,"category added successfully");
-
-        }else{
-            return $this->error(null,"category could not be created successfully",401);
-
+        // Check if an image is uploaded
+        if ($request->hasFile('image')) {
+            // Store the image in the 'public' storage folder
+            $imagePath = $request->file('image')->store('images', 'public');
+            $category->image_path = $imagePath; // Save the image path to the database
         }
 
-
+        if ($category->save()) {
+            return $this->success($category, "Category added successfully");
+        } else {
+            return $this->error(null, "Category could not be created successfully", 401);
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -68,6 +73,11 @@ class categoriesController extends Controller
         $category = Category::find($id);
         $category->category_code = $request->category_code;
         $category->category_name = $request->category_name;
+        if ($request->hasFile('image')) {
+            // Store the image in the 'public' storage folder
+            $imagePath = $request->file('image')->store('images', 'public');
+            $category->image_path = $imagePath; // Save the image path to the database
+        }
         $update = $category->update();
         if($category && $update){
             return $this->success($update,"Category updated successfully");

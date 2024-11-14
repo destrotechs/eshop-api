@@ -42,9 +42,9 @@ class cartController extends Controller
         $request->validate([
             'product_id' => 'required|exists:products,id',
         ]);
-    
+        $productID = $request->input('product_id');
         if ($user) {
-            $product = Product::findOrFail($request->product_id);
+            $product = Product::findOrFail($productID);
     
             if ($product) {
                 // Initialize the wishlist
@@ -56,19 +56,19 @@ class cartController extends Controller
                 // Check if the product already exists in the wishlist
                 $productExists = false;
                 foreach ($wishlistItems as $item) {
-                    if (array_key_exists($request->product_id, array_keys($item))) {
+                    if ($item['product']['id'] == $productID) {  // Updated comparison
                         $productExists = true;
                         break;
                     }
                 }
     
                 if ($productExists) {
-                    return $this->error($wishlistItems, "Item is already in the wishlist.",204);
+                    return $this->success($cart->fetchCart(), "Item is already in the wishlist.", 200);
                 }
                 
-                // Add the product to the wishlist
+                // If product is not in wishlist, add it
                 $prd = new ProductsResource($product);
-                $cart->addToCart($prd);
+                $cart->addToCart($prd); // This should only add if the product doesn't exist
     
                 return $this->success($cart->fetchCart(), "Item added to wishlist successfully");
             }
@@ -76,6 +76,8 @@ class cartController extends Controller
     
         return $this->success([], "Failed to add item to wishlist");
     }
+    
+
     
 
     public function viewCart(Request $request){
