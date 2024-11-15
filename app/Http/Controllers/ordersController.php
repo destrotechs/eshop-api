@@ -15,16 +15,21 @@ class ordersController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $user = $request->user();
-        if ($user->hasRole('admin')) {
-            $orders = OrderResource::collection(Order::all());
-            return $this->success($orders,'Orders fetched successfully');
-        } else {
-            $orders = OrderResource::collection(Order::where('user_id', $user->id)->get());
-        }
-        return $this->success($orders,'Orders fetched successfully');
+{
+    $user = $request->user();
+
+    // Check if the user is an admin
+    if ($user->hasRole('admin')) {
+        // Fetch all orders for admins, ordered by latest first (descending order)
+        $orders = OrderResource::collection(Order::orderBy('created_at', 'desc')->get());
+        return $this->success($orders, 'Orders fetched successfully');
+    } else {
+        // Fetch orders for the current user (non-admins), ordered by latest first (descending order)
+        $orders = OrderResource::collection(Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get());
+        return $this->success($orders, 'Orders fetched successfully');
     }
+}
+
 
     /**
      * Store a newly created resource in storage.

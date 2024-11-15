@@ -23,4 +23,5 @@ class PaymentMode extends Model
         return $this->hasMany('App\Models\Payment');
     }
     
+    
 }

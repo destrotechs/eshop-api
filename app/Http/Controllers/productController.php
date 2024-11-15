@@ -134,6 +134,8 @@ class productController extends Controller
             'options'=>$request->options??$product->options,
             'price'=>$request->price??$product->price,
             'bar_code'=>$request->bar_code??$product->bar_code,
+            'discount'=>$request->discount??$product->discount,
+            'offset'=>$request->offset??$product->offset,
         ]);
 
         if($update){

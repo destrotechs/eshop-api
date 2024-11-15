@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\PaymentsResource;
 
 class PaymentController extends Controller
 {
@@ -144,5 +145,17 @@ public function register_callback_urls(Request $request){
     $response = $this->mpesa->registerUrls();
     return response()->json($response);
 }
+public function getAllPayments(Request $request)
+{
+    // Fetch all payments ordered by 'paid_on' in descending order
+    $payments = PaymentsResource::collection(Payment::orderBy('paid_on', 'desc')->get());
+
+    if ($payments->isNotEmpty()) {
+        return $this->success($payments, 'Request was completed successfully');
+    } else {
+        return $this->error($payments, 'Payments not found', 200);
+    }
+}
+
 
 }
