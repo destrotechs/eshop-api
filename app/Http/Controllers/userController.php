@@ -155,4 +155,36 @@ public function remove_user_roles(Request $request){
         }
         return $this->error(null,"The selected payment mode is invalid");
     }
+    public function getUserNotifications(Request $request)
+    {
+        $user = $request->user(); // Get the authenticated user
+
+        // Check if the user is authenticated
+        if (!$user) {
+            return $this->error(null, "User is not authenticated");
+        }
+
+        // Fetch only unread notifications (those with null read_at)
+        $notifications = $user->notifications()->whereNull('read_at')->get();
+
+        // Return the notifications in the success response
+        return $this->success($notifications, "User Notifications fetched successfully");
+    }
+
+    public function markAsRead($notificationId)
+    {
+        $user = auth()->user(); // Get the authenticated user
+
+        // Fetch the notification by its ID
+        $notification = $user->notifications()->find($notificationId);
+
+        if ($notification) {
+            // Mark the notification as read
+            $notification->markAsRead();
+            return $this->success( $notification,'Notification marked as read', 200);
+        }
+
+        return $this->error(null,"TNotification not found");
+    }
+
 }

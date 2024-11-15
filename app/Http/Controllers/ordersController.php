@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\Order;
+use App\Notifications\OrderConfirmed;
+use App\Notifications\OrderShipped;
 use App\Models\OrderItem;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
@@ -84,10 +86,35 @@ class ordersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+
+    public function update(Request $request, $orderId)
     {
-        //
+        // Find the order
+        $order = Order::findOrFail($orderId);
+
+        // Check if the current status is not already 'Confirmed'
+        
+            // Update the order status
+            $order->status = $request->status;
+            $order->save();
+        if ($order->status=='Confirmed') {
+            // Notify the user (who placed the order) about the status update
+            $user = $order->user;  // Assuming you have a 'user' relationship on the Order model
+            $user->notify(new OrderConfirmed($order)); // Send the notification
+
+            return $this->success(null, 'Order status updated to confirmed, and user notified.');
+        }
+        if ($order->status=='Shipped') {
+            // Notify the user (who placed the order) about the status update
+            $user = $order->user;  // Assuming you have a 'user' relationship on the Order model
+            $user->notify(new OrderShipped($order)); // Send the notification
+
+            return $this->success(null, 'Order status updated to Shipped, and user notified.');
+        }
+
+        return $this->success($order, 'Order status has been changed successfully.', 200);
     }
+
 
     /**
      * Remove the specified resource from storage.

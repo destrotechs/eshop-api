@@ -80,7 +80,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/orders',[ordersController::class,'index']);
     Route::get('/order/{id}',[ordersController::class,'show']);
     Route::get('/user/{user}',[userController::class,'user']);
+    Route::get('/notifications',[userController::class,'getUserNotifications']);
     Route::post('/users/profile',[profileController::class,'store']);
+    Route::patch('/notifications/{notificationId}/read',[userController::class,'markAsRead']);
     Route::put('/users/profile',[profileController::class,'updateProfile']);
     Route::post('users/address',[profileController::class,'addAddress']);
     Route::post('review/add', [ratingsController::class,'store']);
@@ -105,6 +107,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('subcategories/create', [subcategoriesController::class,'store']);
     
     Route::put('/subcategory/{id}',[subcategoriesController::class,'update']);
+    Route::put('/order/update/{orderId}',[ordersController::class,'update']);
     Route::delete('subcategory/{id}', [subcategoriesController::class,'destroy']);
 
     //rating routes
