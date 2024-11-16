@@ -48,7 +48,7 @@ class ordersController extends Controller
         $cart = new Cart('shopping_cart',null,$user);
         $items = $cart->fetchCart();
         if (count($items)>0){
-            $order_number =  date('Ymd_His') . '_' . uniqid();
+            $order_number = uniqid();
             $user_id = $user->id;
             $address_id = $request->address;
 
