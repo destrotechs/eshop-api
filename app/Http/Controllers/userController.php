@@ -122,7 +122,7 @@ public function remove_user_roles(Request $request){
         $right = Right::find($request->right_id);
         if($role && $right){    
             $role->rights()->attach($right);    
-            return $this->success($role,"Rights assigned successfully");
+            return $this->success($role,"Rights assigned successfully","Rights assigned successfully");
         }else{
             return $this->error($request, "The role supplied is invalid",401);
         }
@@ -141,7 +141,7 @@ public function remove_user_roles(Request $request){
 
         $mode->save();
 
-        return $this->success($mode,"Payment Mode has been added successfully",200);
+        return $this->success($mode,"Payment Mode has been added successfully","Payment Mode has been added successfully",200);
     }
     public function getPaymentModes(){
         $payment_modes = PaymentModesResource::collection(PaymentMode::all());
@@ -181,10 +181,10 @@ public function remove_user_roles(Request $request){
         if ($notification) {
             // Mark the notification as read
             $notification->markAsRead();
-            return $this->success( $notification,'Notification marked as read', 200);
+            return $this->success( $notification,'Notification marked as read','Notification marked as read', 200);
         }
 
-        return $this->error(null,"TNotification not found");
+        return $this->error(null,"Notification not found");
     }
 
 }

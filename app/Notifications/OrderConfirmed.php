@@ -46,7 +46,7 @@ class OrderConfirmed extends Notification
     {
         return [
             'order_id' => $this->order->id,
-            'message' => 'Your order '.$this->order->order_number.'has been confirmed!',
+            'message' => 'Your order '.$this->order->order_number.' has been confirmed!',
         ];
     }
 }

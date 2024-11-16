@@ -80,9 +80,9 @@ class categoriesController extends Controller
         }
         $update = $category->update();
         if($category && $update){
-            return $this->success($update,"Category updated successfully");
+            return $this->success($update,"Category updated successfully","Category updated successfully");
         }else{
-            return $this->error(null,"Category could not be");
+            return $this->error(null,"Category could not be updated successfully","Category could not be updated successfully");
         }
     }
 
@@ -94,9 +94,9 @@ class categoriesController extends Controller
         $category = Category::find($id);
         $del = $category->delete();
         if($del){
-            return $this->success($category,"Category deleted successfully");
+            return $this->success($category,"Category deleted successfully","Category deleted successfully");
         }else{
-            return $this->error(null,"Category could not be found",401);
+            return $this->error(null,"Category could not be found","Category could not be found",401);
         }
     }
 }

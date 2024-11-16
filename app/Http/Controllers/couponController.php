@@ -16,9 +16,9 @@ class couponController extends Controller
         if ($coupon_data && $coupon_data->discountRate > 0) {
             $cart = new Cart('shopping_cart', null, $user);
             $cart->applyCoupon($coupon, $coupon_data->discountRate);
-            return $this->success($cart->getCartSummary(),"Coupon has been applied successfully");
+            return $this->success($cart->getCartSummary(),"Coupon has been applied successfully","Coupon has been applied successfully");
         } else {    
-            return $this->error($coupon,"The coupon code is not valid",300);
+            return $this->error($coupon,"The coupon code is not valid","The coupon code is not valid",300);
         }
         // Return the updated cart summary
     }

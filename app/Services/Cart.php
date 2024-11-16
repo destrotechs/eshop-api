@@ -19,7 +19,7 @@ class Cart
         // Initialize cart type
         $this->cartType = $cartType;
         $this->userId = $user->id;
-        $this->taxRate = 16;
+        $this->taxRate = 0;
         $this->discount = 0;
         $this->coupon = null;
         $this->discountRate = 0;

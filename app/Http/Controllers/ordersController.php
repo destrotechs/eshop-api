@@ -24,11 +24,11 @@ class ordersController extends Controller
     if ($user->hasRole('admin')) {
         // Fetch all orders for admins, ordered by latest first (descending order)
         $orders = OrderResource::collection(Order::orderBy('created_at', 'desc')->get());
-        return $this->success($orders, 'Orders fetched successfully');
+        return $this->success($orders, 'Orders fetched successfully',null);
     } else {
         // Fetch orders for the current user (non-admins), ordered by latest first (descending order)
         $orders = OrderResource::collection(Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get());
-        return $this->success($orders, 'Orders fetched successfully');
+        return $this->success($orders, 'Orders fetched successfully',null);
     }
 }
 
@@ -67,7 +67,7 @@ class ordersController extends Controller
 
             if($order->items()->save($order_items)){
                 $cart->clearCart();
-                return $this->success(new OrderResource($order),"Order added successfully");
+                return $this->success(new OrderResource($order),"Order added successfully","Order added successfully");
             }
         }
              
@@ -102,17 +102,17 @@ class ordersController extends Controller
             $user = $order->user;  // Assuming you have a 'user' relationship on the Order model
             $user->notify(new OrderConfirmed($order)); // Send the notification
 
-            return $this->success(null, 'Order status updated to confirmed, and user notified.');
+            return $this->success(null, 'Order status updated to confirmed, and user notified.','Order status updated to confirmed, and user notified.');
         }
         if ($order->status=='Shipped') {
             // Notify the user (who placed the order) about the status update
             $user = $order->user;  // Assuming you have a 'user' relationship on the Order model
             $user->notify(new OrderShipped($order)); // Send the notification
 
-            return $this->success(null, 'Order status updated to Shipped, and user notified.');
+            return $this->success(null, 'Order status updated to Shipped, and user notified.','Order status updated to Shipped, and user notified.');
         }
 
-        return $this->success($order, 'Order status has been changed successfully.', 200);
+        return $this->success($order, 'Order status has been changed successfully.','Order status has been changed successfully.', 200);
     }
 
 

@@ -36,9 +36,9 @@ class authController extends Controller
         $token = $user->createToken('token-name')->plainTextToken;
 
         if($user){
-            return $this->success($token, "User created successfully");
+            return $this->success($token, "User created successfully","User created successfully");
         }else{
-            return $this->error($user,"User could not be created",500);
+            return $this->error($user,"User could not be created","User could not be created");
         }       
 
     }
@@ -57,14 +57,14 @@ class authController extends Controller
             $token = $user->createToken('token-name')->plainTextToken;
             return $this->success(['accessToken'=>$token,'user'=>$user]);
         }else{
-            return $this->error(null,'Wrong Credentials',201);
+            return $this->error(null,'Wrong Credentials','Wrong Credentials',201);
         }
 
     }
     public function logout(Request $request){
         $user = Auth::user();
         $user->tokens()->delete();
-        return $this->success(null,'Logout successful');
+        return $this->success(null,'Logout successful','Wrong Credentials');
 
     }
 }

@@ -92,7 +92,7 @@ class productController extends Controller
         $added = $subcategory->products()->save($product);
 
         if($added){
-            return $this->success($product,'Product added successfully');
+            return $this->success($product,'Product added successfully','Product added successfully');
         }else{
             return $this->error($request->all(),'There was a problem adding the product',401);
         }
@@ -139,9 +139,9 @@ class productController extends Controller
         ]);
 
         if($update){
-            return $this->success($product,"Product updated successfully");
+            return $this->success($product,"Product updated successfully","Product updated successfully");
         }else{
-            return $this->error($product,"Product could not be updated");
+            return $this->error($product,"Product could not be updated","Product could not be updated");
         }
     }
     public function get_product_rating(Request $request, $id) {
@@ -184,9 +184,9 @@ class productController extends Controller
         $product = Product::find($id);
         $del = $product->delete();
         if($del){
-            return $this->success($product,"Product deleted successfully");
+            return $this->success($product,"Product deleted successfully","Product deleted successfully");
         }else{
-            return $this->error($product,"Product could not be deleted");
+            return $this->error($product,"Product could not be deleted","Product could not be deleted");
         }
     }
 }

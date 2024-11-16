@@ -29,12 +29,12 @@ class cartController extends Controller
                 $prd = new ProductsResource($product);
                 $cart = new Cart('shopping_cart',null,$user);
                 $cart->addToCart($prd);
-                return $this->success($cart->fetchCart(),"Item added to cart successfully");
+                return $this->success($cart->fetchCart(),"Item added to cart successfully","Item added to cart successfully");
             }
 
         }
 
-        return $this->success($cart->fetchCart(),"Item added to cart successfully");
+        return $this->success($cart->fetchCart(),"Item added to cart successfully","Item added to cart successfully");
     }
     public function addToWishList(Request $request)
     {
@@ -63,18 +63,18 @@ class cartController extends Controller
                 }
     
                 if ($productExists) {
-                    return $this->success($cart->fetchCart(), "Item is already in the wishlist.", 200);
+                    return $this->success($cart->fetchCart(), "Item is already in the wishlist.","Item is already in the wishlist.", 200);
                 }
                 
                 // If product is not in wishlist, add it
                 $prd = new ProductsResource($product);
                 $cart->addToCart($prd); // This should only add if the product doesn't exist
     
-                return $this->success($cart->fetchCart(), "Item added to wishlist successfully");
+                return $this->success($cart->fetchCart(), "Item added to wishlist successfully","Item added to wishlist successfully");
             }
         }
     
-        return $this->success([], "Failed to add item to wishlist");
+        return $this->error([], "Failed to add item to wishlist","Failed to add item to wishlist");
     }
     
 
@@ -107,7 +107,7 @@ class cartController extends Controller
         }
         $cart = new Cart('shopping_cart',null,$user);
         $cart->removeFromCart($request->product_id);
-        return $this->success($cart->getCartSummary(),"Item removed from cart successfully");
+        return $this->success($cart->getCartSummary(),"Item removed from cart successfully","Item removed from cart successfully");
     }
     public function removeFromWishlist(Request $request){
         $user = $request->user();
@@ -119,7 +119,7 @@ class cartController extends Controller
         }
         $cart = new Cart('wishlist',null,$user);
         $cart->removeFromCart($request->product_id);
-        return $this->success($cart->getCartSummary(),"Item removed from wishlist successfully");
+        return $this->success($cart->getCartSummary(),"Item removed from wishlist successfully","Item removed from wishlist successfully");
     }
     public function updateQuantity(Request $request){
         $user = $request->user();
@@ -136,7 +136,7 @@ class cartController extends Controller
                 $prd = new ProductsResource($product);
                 $cart = new Cart('shopping_cart',null,$user);
                 $cart->addToCart($prd,$request->quantity);
-                return $this->success($cart->fetchCart(),"Quantity changed successfully");
+                return $this->success($cart->fetchCart(),"Quantity changed successfully","Quantity changed successfully");
             }
         return $this->success($cart->getCartSummary(),"cart fetched successfully");
     }
