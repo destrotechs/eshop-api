@@ -62,7 +62,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::put('/shopping/quantity', [cartController::class,'updateQuantity']);
     Route::post('/shopping/wishlist', [cartController::class,'addToWishList']);
     Route::get('/user/{user}',[userController::class,'user']);
-    Route::get('/dashboard/index',[dashboardController::class,'index']);
+    // Route::get('/dashboard/index',[dashboardController::class,'index']);
     Route::get('/shopping/cart/', [cartController::class,'viewCart']);
     Route::post('/shopping/cart/remove', [cartController::class,'removeFromCart']);
     Route::get('/shopping/wishlist/', [cartController::class,'viewWishlist']);
@@ -97,6 +97,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
 });
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     //category routes
+    Route::get('dashboard/data', [dashboardController::class,'getDashboardData']);
+    Route::get('dashboard/topselling', [dashboardController::class,'getTopSellingProducts']);
     Route::post('categories/create', [categoriesController::class,'store']);
    
     Route::get('category/{id}', [categoriesController::class,'show']);
