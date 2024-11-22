@@ -28,7 +28,7 @@ class ordersController extends Controller
     } else {
         // Fetch orders for the current user (non-admins), ordered by latest first (descending order)
         $orders = OrderResource::collection(Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get());
-        return $this->success($orders, 'Orders fetched successfully',null);
+        return $this->success($orders, 'Orders fetched successfully',null,200);
     }
 }
 
@@ -93,7 +93,24 @@ class ordersController extends Controller
         $order = Order::findOrFail($orderId);
 
         // Check if the current status is not already 'Confirmed'
-        
+        if ($order->status=='Shipped' && $request->status!='Delivered'){
+            return $this->error(null, "Order is already shipped. You can't update status to 'Confirmed'.",400);
+        }
+        if ($order->status=='Shipped' && $request->status=='Cancelled'){
+            return $this->error(null,null, "Order is already shipped. You can't update status to 'Cancelled'.",400);
+        }
+        if ($order->status=='Delivered' && $request->status!='Cancelled'){
+            return $this->error(null,null, "Order is already delivered. You can't update status to 'Cancelled'.",400);
+        }
+        if ($order->status=='Shipped' && $request->status=='Confirmed'){
+            return $this->error(null,null, "Order is already shipped. You can't update status to 'Confirmed'.",400);
+        }
+        if ($order->status=='Delivered' && $request->status=='Shipped'){
+            return $this->error(null,null, "Order is already delivered. You can't update status to 'Shipped'.",400);
+        }
+        if ($order->status!='Confirmed' && $request->status=='Shipped'){
+            return $this->error(null,null, "Order is not Confirmed Yet. Please confirm the order first.",400);
+        }
             // Update the order status
             $order->status = $request->status;
             $order->save();
@@ -121,6 +138,18 @@ class ordersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $order = Order::find($id);
+        if ($order->status=='Confirmed'){
+            return $this->error(null,null, "Order can't be deleted. It has been confirmed or Confirmed.");  // Order is confirmed or shipped, can't be deleted.  // You can also add more checks here based on your requirements.  // For example, you might want to prevent deleting orders that have been paid for.  // Or have a separate "deleted_at" column for soft deletion.  // In this case, you would return a 410 Gone response instead of a 404 Not Found response.  // This is a common practice for soft deletion in Laravel.  // For a more complex solution, consider using a package like Spatie's Laravel SoftDeletes.  // For example, you could use the "forceDelete()" method to delete an order even if it has been confirmed or shipped.  // But keep in mind that this could lead to data loss if not handled properly.  // For example, you
+        }
+        if($order->status == 'Shipped'){
+            return $this->error(null,null, "Order can't be deleted. It has been confirmed or shipped.");
+        }
+        $del = $order->delete();
+        if($del){
+            return $this->success($del,"Order deleted successfully");
+        } else{
+            return $this->error(null,"There was a problem deleting the order");
+        }
     }
 }

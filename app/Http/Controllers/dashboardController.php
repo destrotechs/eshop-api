@@ -43,7 +43,7 @@ class dashboardController extends Controller
         $newCustomers = User::whereBetween('created_at', [$startOfWeek, $endOfWeek])
             ->count();
 
-        $orders  = Order::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
+        $orders  = Order::whereBetween('created_at', [$startOfMonth, $endOfMonth])->get();
         $products = [];
         $soldProducts = [];
         foreach($orders as $order){
@@ -89,7 +89,7 @@ class dashboardController extends Controller
         $startOfMonth = $today->copy()->startOfMonth(); // 2024-11-01 00:00:00
         $endOfMonth = $today->copy()->endOfMonth();
 
-        $orders  = Order::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
+        $orders  = Order::whereBetween('created_at', [$startOfMonth, $endOfMonth])->get();
         $products = [];
         $soldProducts = [];
         foreach($orders as $order){

@@ -53,7 +53,7 @@ class Cart
                 'quantity' => $quantity,
                 'price' => $product->price,
                 'discount' => $product->discount,  // Add product discount field
-                'total' => $product->price * $quantity
+                'total' => (int)$product->price * $quantity*(1-$product->discount/100),
             ];
         }
 
@@ -65,7 +65,7 @@ class Cart
                 'quantity' => $quantity,
                 'price' => $product->price,
                 'discount' => $product->discount,  // Add product discount field
-                'total' => $product->price * $quantity 
+                'total' => (int)$product->price * $quantity*(1-($product->discount/100))
             ]
         ];
 
@@ -191,16 +191,16 @@ protected function calculateProductTotal($price, $discount, $quantity)
         $discount = $this->calculateDiscount();
         $tax = $this->calculateTax();
 
-        return $subtotal - $discount + $tax;
+        return $subtotal + $tax;
     }
 
     public function getCartSummary()
     {
         return [
             'subtotal' => $this->getSubtotal(),
-            'discount' => $this->calculateDiscount(),
-            'tax' => $this->calculateTax(),
-            'total' => $this->getTotal(),
+            'discount' => (int)$this->calculateDiscount(),
+            'tax' => (int)$this->calculateTax(),
+            'total' => (int)$this->getTotal(),
             'items' => $this->fetchCart(),
             'coupon' => $this->coupon
         ];

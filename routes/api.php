@@ -90,7 +90,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/pay-via-mpesa', [PaymentController::class, 'mpesaPayment']);
     Route::get('/products/{id}/user-review',[productController::class,'get_product_rating']);
     Route::get('/register_urls',[PaymentController::class,'register_callback_urls']);
-
+    Route::put('/order/update/{orderId}',[ordersController::class,'update']);
 
 
     
@@ -109,7 +109,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('subcategories/create', [subcategoriesController::class,'store']);
     
     Route::put('/subcategory/{id}',[subcategoriesController::class,'update']);
-    Route::put('/order/update/{orderId}',[ordersController::class,'update']);
+    
     Route::delete('subcategory/{id}', [subcategoriesController::class,'destroy']);
 
     //rating routes
