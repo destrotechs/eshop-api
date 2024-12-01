@@ -33,7 +33,7 @@ class Cart
         return $this->cartType === 'wishlist' ? 'wishlists' : 'shopping_carts';
     }
 
-    public function addToCart($product, $quantity = 1, $replaceQuantity = false)
+    public function addToCart($product, $quantity = 1, $replaceQuantity = false,$color_option=null)
 {
     $existingCart = DB::table($this->getTable())->where('user_id', $this->userId)->first();
 
@@ -51,6 +51,7 @@ class Cart
             $cartContent[$product->id] = [
                 'product' => $product,
                 'quantity' => $quantity,
+                'color_option'=>$color_option??'Not specified',
                 'price' => $product->price,
                 'discount' => $product->discount,  // Add product discount field
                 'total' => (int)$product->price * $quantity*(1-$product->discount/100),

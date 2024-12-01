@@ -28,7 +28,7 @@ class cartController extends Controller
             if($product){
                 $prd = new ProductsResource($product);
                 $cart = new Cart('shopping_cart',null,$user);
-                $cart->addToCart($prd);
+                $cart->addToCart($prd,$request->quantity??1,false,$color_option=$request->color_option??'Not specified');
                 return $this->success($cart->fetchCart(),"Item added to cart successfully","Item added to cart successfully");
             }
 

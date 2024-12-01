@@ -19,7 +19,7 @@ class UserResource extends JsonResource
             'name'=>$this->name,
             'email'=>$this->email,
             'addresses'=>$this->addresses,
-            'orders'=>$this->orders,
+            'orders'=>OrderResource::collection($this->orders),
             'profile'=>$this->profile,
             'roles'=>$this->roles,
             'payment_modes'=>$this->payment_modes,
