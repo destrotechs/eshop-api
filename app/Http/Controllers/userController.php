@@ -41,13 +41,13 @@ class userController extends Controller
         $user = User::find($request->user);
         $user_info = new UserResource($user);
         if($user){
-            return $this->success($user_info,"User was fetched successfully",200);
+            return $this->success($user_info,null,null);
         }
-        return $this->error($request->id,"User with this ID could not be found",400);
+        return $this->error($request->id,null,"User with this ID could not be found");
     }
     public function rights(){
         $rights = RightsResource::collection(Right::all());
-        return $this->success($rights,'Rights fetched successfully');
+        return $this->success($rights,null,null);
     }
 
     public function addroles(Request $request){
@@ -58,11 +58,11 @@ class userController extends Controller
             'role_name'=>$request->role_name,
         ]);
         $type->save();
-        return $this->success($type,"User Role added successfully",200);
+        return $this->success($type,null,"User Role added successfully");
     }
     public function user_roles(){
         $user_roles = UserRoleResource::collection(Role::all());
-        return $this->success($user_roles,'Usertypes fetched successfully');
+        return $this->success($user_roles,null,null);
     }
 
     public function assign_user_roles(Request $request){
@@ -78,10 +78,10 @@ class userController extends Controller
 
             $user->roles()->attach($role);
         
-            return $this->success($user,"User Role assigned successfully");
+            return $this->success($user,null,"User Role assigned successfully");
         }
 
-        return $this->error(null,"The user or the role supplied is invalid",400);
+        return $this->error(null,null,"The user or the role supplied is invalid",400);
 
     
 }
@@ -91,9 +91,9 @@ public function remove_user_roles(Request $request){
     if($user){
         $user->roles()->detach($request->role_id);
 
-        return $this->success($user,'Role removed successfully');
+        return $this->success($user,null,'Role removed successfully');
     }
-    return $this->error(null,"User could not be found");
+    return $this->error(null,null,"User could not be found");
 }
 
     public function addRights(Request $request){
@@ -104,11 +104,11 @@ public function remove_user_roles(Request $request){
             'right_to'=>$request->right_to,
         ]);
         $right->save();
-        return $this->success($right,'Right created successfully');
+        return $this->success($right,null,'Right created successfully');
     }
     public function rolerights(){
         $rolerights = RoleRightsResource::collection(Role::all());
-        return $this->success($rolerights,'Role Rights fetched successfully');
+        return $this->success($rolerights,null,null);
     }
 
 
@@ -124,7 +124,7 @@ public function remove_user_roles(Request $request){
             $role->rights()->attach($right);    
             return $this->success($role,"Rights assigned successfully","Rights assigned successfully");
         }else{
-            return $this->error($request, "The role supplied is invalid",401);
+            return $this->error($request,null, "The role supplied is invalid",401);
         }
         
     }
@@ -151,9 +151,9 @@ public function remove_user_roles(Request $request){
         if($request->payment_mode_id){
             $mode = PaymentMode::findOrFail($request->payment_mode_id);
             $details = new PaymentModesDetailsResource($mode);
-            return $this->success($details,$mode->payment_mode_name." Details fetched successfully");
+            return $this->success($details,null,$mode->payment_mode_name." Details fetched successfully");
         }
-        return $this->error(null,"The selected payment mode is invalid");
+        return $this->error(null,null,"The selected payment mode is invalid");
     }
     public function getUserNotifications(Request $request)
     {
@@ -161,14 +161,14 @@ public function remove_user_roles(Request $request){
 
         // Check if the user is authenticated
         if (!$user) {
-            return $this->error(null, "User is not authenticated");
+            return $this->error(null, null,"User is not authenticated");
         }
 
         // Fetch only unread notifications (those with null read_at)
         $notifications = $user->notifications()->whereNull('read_at')->get();
 
         // Return the notifications in the success response
-        return $this->success($notifications, "User Notifications fetched successfully");
+        return $this->success($notifications, null,null);
     }
 
     public function markAsRead($notificationId)
@@ -184,7 +184,7 @@ public function remove_user_roles(Request $request){
             return $this->success( $notification,'Notification marked as read','Notification marked as read', 200);
         }
 
-        return $this->error(null,"Notification not found");
+        return $this->error(null,null,"Notification not found");
     }
 
 }

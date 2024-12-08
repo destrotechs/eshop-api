@@ -18,9 +18,9 @@ class StockController extends Controller
     {
         $stocks = Stock::all();
         if($stocks){
-            return $this->success($stocks,"Stocks fetched successfully");
+            return $this->success($stocks,null,"Stocks fetched successfully");
         }else{
-            return $this->error($stocks,"Stocks not found");
+            return $this->error($stocks,null,"Stocks not found");
         }
 
     }
@@ -28,9 +28,9 @@ class StockController extends Controller
     {
         $stocks = Stock::with('product')->where('product_id','=',$product_id)->get();
         if($stocks){
-            return $this->success($stocks,"Stocks fetched successfully");
+            return $this->success($stocks,"Stocks fetched successfully","Stocks fetched successfully");
         }else{
-            return $this->error($stocks,"Stocks not found");
+            return $this->error($stocks,"Stocks not found","Stocks not found");
         }
 
     }
@@ -54,9 +54,9 @@ class StockController extends Controller
         $add = $product->stock()->save($stock);
 
         if($add){
-            return $this->success($stock,"Product stock added successfully");
+            return $this->success($stock,"Product stock added successfully","Product stock added successfully");
         }else{
-            return $this->error($stock,"Stock record could not be added");
+            return $this->error($stock,"Stock record could not be added","Stock record could not be added");
         }
     }
 

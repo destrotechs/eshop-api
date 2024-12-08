@@ -24,11 +24,11 @@ class ordersController extends Controller
     if ($user->hasRole('admin')) {
         // Fetch all orders for admins, ordered by latest first (descending order)
         $orders = OrderResource::collection(Order::orderBy('created_at', 'desc')->get());
-        return $this->success($orders, 'Orders fetched successfully',null);
+        return $this->success($orders,null, null);
     } else {
         // Fetch orders for the current user (non-admins), ordered by latest first (descending order)
         $orders = OrderResource::collection(Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get());
-        return $this->success($orders, 'Orders fetched successfully',null,200);
+        return $this->success($orders,null, null);
     }
 }
 
@@ -71,7 +71,7 @@ class ordersController extends Controller
             }
         }
              
-        return $this->error(null,"Order could not be created, try again");
+        return $this->error(null,null,"Order could not be created, try again");
     }
 
     /**
@@ -80,7 +80,7 @@ class ordersController extends Controller
     public function show(string $id)
     {
         $order = Order::findOrFail($id);
-        return $this->success(new OrderResource($order),"Order fetched successfuly");
+        return $this->success(new OrderResource($order),null,null);
     }
 
     /**
@@ -129,7 +129,7 @@ class ordersController extends Controller
             return $this->success(null, 'Order status updated to Shipped, and user notified.','Order status updated to Shipped, and user notified.');
         }
 
-        return $this->success($order, 'Order status has been changed successfully.','Order status has been changed successfully.', 200);
+        return $this->success($order, 'Order status has been changed successfully.','Order status has been changed successfully.');
     }
 
 
@@ -147,9 +147,9 @@ class ordersController extends Controller
         }
         $del = $order->delete();
         if($del){
-            return $this->success($del,"Order deleted successfully");
+            return $this->success($del,null,"Order deleted successfully");
         } else{
-            return $this->error(null,"There was a problem deleting the order");
+            return $this->error(null,null,"There was a problem deleting the order");
         }
     }
 }

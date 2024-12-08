@@ -98,7 +98,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     //category routes
     Route::get('dashboard/data', [dashboardController::class,'getDashboardData']);
-    Route::get('dashboard/topselling', [dashboardController::class,'getTopSellingProducts']);
+    Route::get('dashboard/topselling/{month}', [dashboardController::class,'getTopSellingProducts']);
     Route::post('categories/create', [categoriesController::class,'store']);
    
     Route::get('category/{id}', [categoriesController::class,'show']);

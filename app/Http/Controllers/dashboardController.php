@@ -19,13 +19,16 @@ class dashboardController extends Controller
 {
     use HttpResponses;
 
-    public function getDashboardData()
+    public function getDashboardData(Request $request)
     {
         $today = Carbon::today();
         $startOfWeek = $today->copy()->startOfWeek();
         $endOfWeek = $today->copy()->endOfWeek();
         $startOfMonth = $today->copy()->startOfMonth(); // 2024-11-01 00:00:00
         $endOfMonth = $today->copy()->endOfMonth();
+
+        $startOfLastMonth = $today->copy()->subMonth()->startOfMonth();
+        $endOfLastMonth = $today->copy()->subMonth()->endOfMonth();
 
         // Number of confirmed orders
         $confirmedOrders = Order::where('status', 'confirmed')->count();
@@ -42,8 +45,12 @@ class dashboardController extends Controller
         // New customers (weekly registration)
         $newCustomers = User::whereBetween('created_at', [$startOfWeek, $endOfWeek])
             ->count();
+        if ($request->get('month')=='current'){
+            $orders  = Order::whereBetween('created_at', [$startOfMonth, $endOfMonth])->get();
+        }else{
+            $orders  = Order::whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])->get();
 
-        $orders  = Order::whereBetween('created_at', [$startOfMonth, $endOfMonth])->get();
+        }
         $products = [];
         $soldProducts = [];
         foreach($orders as $order){
@@ -82,14 +89,22 @@ class dashboardController extends Controller
             'monthlySales' => $monthlySales,
         ]);
     }
-    public function getTopSellingProducts(Request $request){
+    public function getTopSellingProducts(Request $request,$month){
         $today = Carbon::today();
         $startOfWeek = $today->copy()->startOfWeek();
         $endOfWeek = $today->copy()->endOfWeek();
         $startOfMonth = $today->copy()->startOfMonth(); // 2024-11-01 00:00:00
         $endOfMonth = $today->copy()->endOfMonth();
 
-        $orders  = Order::whereBetween('created_at', [$startOfMonth, $endOfMonth])->get();
+        $startOfLastMonth = $today->copy()->subMonth()->startOfMonth();
+        $endOfLastMonth = $today->copy()->subMonth()->endOfMonth();
+
+        if ($month=='current'){
+            $orders  = Order::whereBetween('created_at', [$startOfMonth, $endOfMonth])->get();
+        }else{
+            $orders  = Order::whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])->get();
+
+        }
         $products = [];
         $soldProducts = [];
         foreach($orders as $order){
