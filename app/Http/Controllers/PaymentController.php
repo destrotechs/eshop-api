@@ -53,7 +53,8 @@ class PaymentController extends Controller
                 $payment->payment_mode_id = $request->payment_mode_id;
                 $payment->payment_id = $CheckoutRequestID;
                 $payment->amount = $amount;
-                // $payment->paid_on = date('Y-m-d H:i:s');
+                $payment->mobile_phone=$phone_number;
+                $payment->paid_on = date('Y-m-d H:i:s');
                 // $payment->payment_details = json_encode($status);
 
                 $order = Order::find($request->orderID);
@@ -148,7 +149,7 @@ public function register_callback_urls(Request $request){
 public function getAllPayments(Request $request)
 {
     // Fetch all payments ordered by 'paid_on' in descending order
-    $payments = PaymentsResource::collection(Payment::orderBy('paid_on', 'desc')->get());
+    $payments = PaymentsResource::collection(Payment::orderBy('created_at', 'desc')->get());
 
     if ($payments->isNotEmpty()) {
         return $this->success($payments, 'Request was completed successfully');

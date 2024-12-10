@@ -22,6 +22,7 @@ class PaymentsResource extends JsonResource
             'payment_mode'=>$this->payment_mode->payment_mode_name,
             'payment_id'=>$this->payment_id,
             'paid_on'=>$this->paid_on,
+            'mobile_phone'=>$this->mobile_phone,
             'payment_details'=>$this->payment_details,
             'created_at'=>$this->created_at,
             'updated_at'=>$this->updated_at,

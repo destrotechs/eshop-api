@@ -15,9 +15,12 @@ class productController extends Controller
     use HttpResponses;
 
     public function index(){
-        $products = ProductsResource::collection(Product::all());
-        if ($products){
-            return $this->success($products,'Request was completed successfully');
+        $products = Product::withSum('stock as total_stock', 'quantity_added')
+            ->orderBy('total_stock', 'desc') // or 'asc' for ascending
+            ->get();
+        $products_resource = ProductsResource::collection($products);
+        if ($products_resource){
+            return $this->success($products_resource,'Request was completed successfully');
         }
     }
     public function product(Request $request){

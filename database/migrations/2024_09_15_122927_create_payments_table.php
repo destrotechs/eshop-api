@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('payment_id')->nullable();
             $table->dateTime('paid_on')->nullable();
             $table->text('payment_details')->nullable();
+            $table->string('mobile_phone')->nullable();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('payment_mode_id')->references('id')->on('payment_modes');  // Assuming payment_modes has a 'id' column for this foreign key
             $table->timestamps();
