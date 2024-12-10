@@ -8,6 +8,8 @@ use App\Models\OrderItem;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use App\Services\Cart;
+use App\Models\Stock;
+use App\Models\Product;
 use App\Http\Resources\OrderResource;
 
 class ordersController extends Controller
@@ -91,6 +93,7 @@ class ordersController extends Controller
     {
         // Find the order
         $order = Order::findOrFail($orderId);
+        
 
         // Check if the current status is not already 'Confirmed'
         if ($order->status=='Shipped' && $request->status!='Delivered'){
@@ -112,6 +115,7 @@ class ordersController extends Controller
             return $this->error(null,null, "Order is not Confirmed Yet. Please confirm the order first.",400);
         }
             // Update the order status
+            
             $order->status = $request->status;
             $order->save();
         if ($order->status=='Confirmed') {
@@ -125,8 +129,13 @@ class ordersController extends Controller
             // Notify the user (who placed the order) about the status update
             $user = $order->user;  // Assuming you have a 'user' relationship on the Order model
             $user->notify(new OrderShipped($order)); // Send the notification
-
-            return $this->success(null, 'Order status updated to Shipped, and user notified.','Order status updated to Shipped, and user notified.');
+            $stock_change = self::post_stock_change($order); // Send
+            if ($stock_change) {
+                return $this->success($stock_change, 'Order status updated to Shipped, and user notified, and stock updated successfully.','Order status updated to Shipped, and user notified, and stock updated successfully.');
+            } else {
+                return $this->error($stock_change, 'Order status updated to Shipped, and user notified, but stock update failed.', 500);
+            }
+            // return $this->success(null, 'Order status updated to Shipped, and user notified.','Order status updated to Shipped, and user notified.');
         }
 
         return $this->success($order, 'Order status has been changed successfully.','Order status has been changed successfully.');
@@ -152,4 +161,48 @@ class ordersController extends Controller
             return $this->error(null,null,"There was a problem deleting the order");
         }
     }
+    public static function post_stock_change($order)
+    {
+        // Fetch the order items
+        $order_items = OrderItem::where('order_id', $order->id)->first();
+    
+        // Ensure order_items exists
+        if (!$order_items) {
+            throw new \Exception('No order items found for the given order ID.');
+        }
+    
+        // Decode items JSON
+        $items = json_decode($order_items->items, true);
+    
+        // Check if JSON decoding was successful
+        if (!is_array($items)) {
+            throw new \Exception('Failed to decode JSON from order items.');
+        }
+    // return $items;
+        // Loop through each item
+        foreach ($items as $key => $item) {
+            // Ensure product data exists in the item
+            if (!isset($item['product']['id']) || !isset($item['quantity'])) {
+                throw new \Exception("Invalid item data: missing product ID or quantity.");
+            }
+    
+            $product = Product::find($item['product']['id']);
+            if (!$product) {
+                throw new \Exception("Product not found for ID: " . $item['product']['id']);
+            }
+    
+            // Create a new Stock record
+            $stock = new Stock();
+            $stock->quantity_added = '-'.$item['quantity'];
+            $stock->unit_of_measure = 'Pieces';
+            $stock->date_altered = date('Y-m-d');
+    
+            // Save the Stock record associated with the Product
+            $product->stock()->save($stock);
+        }
+    
+        return true;
+    }
+    
+
 }
